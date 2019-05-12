@@ -1,6 +1,6 @@
 ---
 title: OpenResty 安装记录
-categories: 问题记录
+categories: 网关
 date: 2017-11-27 17:29:39
 tags:
 ---

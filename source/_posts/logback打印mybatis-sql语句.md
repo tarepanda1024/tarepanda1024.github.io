@@ -1,7 +1,8 @@
 ---
 title: logback打印mybatis sql语句
 date: 2018-01-24 10:34:07
-tags: 问题记录
+tags: 
+categoris: Java
 ---
 最近想在mybatis中打印一下sql语句，发现官网提供的方法都不适合，最终在os china找到了，现在记录一下，以作备份
 

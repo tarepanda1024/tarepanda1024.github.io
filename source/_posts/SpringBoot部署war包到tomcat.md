@@ -2,7 +2,7 @@
 title: SpringBoot部署war包到tomcat
 date: 2017-09-26 07:37:17
 tags:
-categories: 问题记录
+categories: Java
 ---
 
 #### pom文件中打包方式由jar修改为war

@@ -2,7 +2,7 @@
 title: Redis4.0安装及集群搭建
 date: 2017-11-29 19:25:34
 tags:
-categories: 问题记录
+categories: Redis
 ---
 
 环境:Deepin15 (Debian8)

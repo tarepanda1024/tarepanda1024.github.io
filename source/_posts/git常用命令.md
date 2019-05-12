@@ -2,7 +2,7 @@
 title: git常用命令
 date: 2017-10-11 10:08:39
 tags:
-categories: 工具集合
+categories: 工具
 ---
 
 #### 更新分支信息

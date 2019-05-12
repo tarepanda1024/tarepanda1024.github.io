@@ -2,7 +2,7 @@
 title: kong0.12.x源码分析(二)----kong启动流程分析
 date: 2018-05-01 09:29:17
 tags:
-categories: Kong
+categories: 网关
 ---
 今天我们看一下kong的启动流程，kong启动时调用kong start命令，kong的启动脚本内容如下：
 ```bash

@@ -1,7 +1,7 @@
 ---
 title: kong中的trusted_ips、real_ip_header和real_ip_recursive
-tags: kong
-categories: 问题记录
+tags: kong,nginx
+categories: 网关
 date: 2018-10-28 16:42:03
 ---
 

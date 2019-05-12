@@ -2,7 +2,7 @@
 title: Java序列化的一些问题
 date: 2017-09-24 19:56:04
 tags:
-categories: 问题记录
+categories: Java
 ---
 
 ### 1. 静态变量不会被序列化
