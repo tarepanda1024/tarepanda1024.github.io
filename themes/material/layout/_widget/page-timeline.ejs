@@ -402,13 +402,13 @@
                 		<div class="md-timeline-content">
                     			<div class="md-timeline-title"><a href="<%- url_for(post.path) %>"><%= post.title %></a></div>
 					<div class="md-timeline-info">
-						<span class="md-timeline-info-span">Categories:
+						<span class="md-timeline-info-span">分类:
 							<%- list_categories(post.categories, {
 								show_count: false, 
 								style: 'none'
 							}) %>
 						</span>
-						<span class="md-timeline-info-span">Tags:
+						<span class="md-timeline-info-span">标签:
 							<%- list_tags(post.tags, {
 								show_count: false,
 								style: 'none'

@@ -2,7 +2,7 @@
 title: 精巧的web服务器Caddy
 date: 2019-01-22 21:11:38
 tags:
-categoris: 网关
+categories: 网关
 ---
 
 Caddy是一个开源的，使用Golang编写，支持HTTP/2的web服务器。第一个版本发布于2015年，至今在github上已经有超过2万+的stars。和apache、nginx一样，Caddy也提供基本的静态文件托管、反向代理和负载均衡等基本功能。同时主打易用性，配置比较简单，还具有很多看起来比较现代的特性，比如支持自动https(使用Let's Encrypt证书，并自动续期)、markdown文件托管、prometheus监控以及同步git代码生成个人博客(hexo、hugo)等等。

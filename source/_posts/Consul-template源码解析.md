@@ -10,7 +10,7 @@ date: 2019-05-09 11:46:22
 Consul-template的整个流程还是比较清晰的，不过代码中大量运用了goroutine、channel和goto等高级特性，如果不仔细看的话，有些地方可能理不清楚。
 
 下图即是consul-template的整个执行流程。整个流程开有多个单独的goroutine，分别是监听信号重新加载配置或者停止、监听consul kv存储的变化发送更新通知、监听数据的更新通知以及渲染模板并执行命令等
-![Consul-template执行流程图](/images/2019051201.png)
+![Consul-template执行流程图](https://xiaodongliu.com/images/2019051201.png)
 
 ### 初始化资源
 

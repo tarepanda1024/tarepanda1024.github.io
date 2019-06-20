@@ -54,7 +54,7 @@ reading:
 # Thumbnail Settings
 thumbnail:
     purecolor:
-    random_amount: 19
+    random_amount: 6
 
 # Background Settings
 # bing available parameter:
@@ -65,8 +65,10 @@ background:
     purecolor: "#F5F5F5"
     #bgimg: "/img/bg.png"
     bing:
-        enable: false
+        enable: true
         parameter:
+            color: black, blue, brown, green, orange,  white, yellow
+            type: N
 
 # Images Settings
 img:
@@ -74,7 +76,7 @@ img:
     avatar: "/img/avatar.png"
     daily_pic: "/img/daily_pic.png"
     sidebar_header: "/img/sidebar_header.png"
-    random_thumbnail: "/img/random/material-"
+    random_thumbnail: "/img/random/"
     footer_image:
           #upyun_logo:
           #  link: "https://www.upyun.com/"
@@ -88,8 +90,8 @@ img:
 #        If you have setup your custom font-family, don't forget to add style tag with @font-face or link.tag with font css to /source/data/head.yml as custom code, to load custom font files.
 fonts:
     family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
-    use: google
-    custom_font_host:
+    use: custom
+    custom_font_host: https://fonts.css.network
 
 # Card Elevation Level
 card_elevation: 2
@@ -198,6 +200,10 @@ sidebar:
         icon: chrome_reader_mode
         divider: false
     pages:
+        # 标签云:
+        #     link: "/tags"
+        #     icon: timeline
+        #     divider: false
         时间线:
             link: "/timeline"
             icon: timeline

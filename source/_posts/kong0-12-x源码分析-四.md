@@ -2,7 +2,7 @@
 title: kong0.12.x源码分析(四)---插件机制
 date: 2019-03-15 12:39:50
 tags: 网关
-categoris: 网关
+categories: 网关
 ---
 
 ### Kong插件的目录结构

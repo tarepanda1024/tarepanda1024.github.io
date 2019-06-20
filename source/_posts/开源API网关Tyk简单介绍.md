@@ -2,7 +2,7 @@
 title: 开源API网关Tyk简单介绍
 date: 2019-01-15 21:11:38
 tags:
-categoris: 网关
+categories: 网关
 ---
 
 tyk是一款采用golang语言实现的API网关，具有API Gateway、Tyk Dashboard、 Tyk Pumpd和Tyk Identity Broker等几大组件。不过只有API Gateway的源代码是开放的。下面主要介绍一下API Gateway的功能与用法。
