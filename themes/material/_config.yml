@@ -63,9 +63,9 @@ thumbnail:
 #         type available value: A (animal), C (culture), N (nature), S (space), T (travel)
 background:
     purecolor: "#F5F5F5"
-    #bgimg: "/img/bg.png"
+    bgimg: "/img/001.jpg"
     bing:
-        enable: true
+        enable: false
         parameter:
             color: black, blue, brown, green, orange,  white, yellow
             type: N
@@ -73,8 +73,8 @@ background:
 # Images Settings
 img:
     logo: "/img/logo.png"
-    avatar: "/img/avatar.webp"
-    daily_pic: "/img/daily_pic.webp"
+    avatar: "/img/avatar.png"
+    daily_pic: "/img/daily_pic.png"
     sidebar_header: "/img/sidebar_header.png"
     random_thumbnail: "/img/random/"
     footer_image:
