@@ -184,7 +184,7 @@ sns_share:
 sidebar:
     dropdown:
         Email Me:
-            link: "#"
+            link: "mailto:liuxiaodong2017@gmail.com"
             icon: email
     homepage:
         use: true
