@@ -69,3 +69,11 @@ gem install redis
 ```
 执行```./redis-trib.rb check 127.0.0.1:7000 ```来判断测试是否正常
 最后我们可以通过``` redis-cli -c -p 7000``` 来连接集群
+
+### 5. 外网连接
+注释掉这一行(为了安全,redis默认开启)：```bind 127.0.0.1```  
+调整```protected-mode yes```为```protected-mode no``` 
+同时创建集群时也需要指定本机IP：
+ ```bash
+./redis-trib.rb  create --replicas 1 xxx:7000 xxx:7001 xxx:7002 xxx:7003 xxx:7004 xxx:7005
+```

@@ -54,7 +54,7 @@ reading:
 # Thumbnail Settings
 thumbnail:
     purecolor:
-    random_amount: 6
+    #random_amount: 6
 
 # Background Settings
 # bing available parameter:
@@ -203,6 +203,10 @@ sidebar:
         #     link: "/tags"
         #     icon: timeline
         #     divider: false
+        友链:
+            link: "/links"
+            icon: link
+            divider: false
         时间线:
             link: "/timeline"
             icon: timeline
