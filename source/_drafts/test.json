@@ -1,0 +1,83 @@
+[
+    {
+        "rateConfigs": [
+            {
+                "arithmetic": "TOKENBUCKET",
+                "duration": 1,
+                "limit": 26,
+                "timeUnit": "SECONDS"
+            }
+        ],
+        "resourceConfig": {
+            "resourceType": "WEBPAGE",
+            "resourceName": "/item/detail"
+        }
+    },
+        {
+        "rateConfigs": [
+            {
+                "arithmetic": "TOKENBUCKET",
+                "duration": 1,
+                "limit": 5,
+                "timeUnit": "SECONDS"
+            }
+        ],
+        "resourceConfig": {
+            "paramConfigs": [
+                {
+                    "compareType": "==",
+                    "compareValue": "3988745",
+                    "paramKey": "arguments[1]"
+                }
+            ],
+            "resourceType": "WEBPAGE",
+            "resourceName": "/item/detail"
+        }
+    },
+    {
+        "rateConfigs": [
+            {
+                "arithmetic": "TOKENBUCKET",
+                "duration": 1,
+                "limit": 64,
+                "timeUnit": "SECONDS"
+            }
+        ],
+        "resourceConfig": {
+            "resourceName": "com.netease.mail.yanxuan.wap.controller.xhr.ItemAjaxController.getDetail"
+        }
+    },
+    {
+        "rateConfigs": [
+            {
+                "arithmetic": "TOKENBUCKET",
+                "duration": 1,
+                "limit": 5,
+                "timeUnit": "SECONDS"
+            }
+        ],
+        "resourceConfig": {
+              "paramConfigs": [
+                {
+                    "compareType": "==",
+                    "compareValue": "3988745",
+                    "paramKey": "arguments[1]"
+                }
+            ],
+            "resourceName": "com.netease.mail.yanxuan.wap.controller.xhr.ItemAjaxController.getDetail"
+        }
+    },
+    {
+        "rateConfigs": [
+            {
+                "arithmetic": "TOKENBUCKET",
+                "duration": 1,
+                "limit": 13,
+                "timeUnit": "SECONDS"
+            }
+        ],
+        "resourceConfig": {
+            "resourceName": "com.netease.mail.yanxuan.wap.controller.xhr.ItemAjaxController.detailForSpec"
+        }
+    }
+]
