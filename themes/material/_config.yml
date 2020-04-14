@@ -90,7 +90,6 @@ img:
 fonts:
     family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif
     use: custom
-    custom_font_host: https://fonts.css.network
 
 # Card Elevation Level
 card_elevation: 2
@@ -274,10 +273,10 @@ leancloud:
 
 # Busuanzi 不蒜子 Views
 busuanzi:
-    enable: true
+    enable: false
     all_site_uv: true
     post_pv: true
-    busuanzi_pure_mini_js: "https://xiaodongliu.com/js/busuanzi/2.3/busuanzi.pure.mini.js"
+    busuanzi_pure_mini_js: "https://photo.fun/js/busuanzi/2.3/busuanzi.pure.mini.js"
 
 # Files Vendors
 # Set a CDN for the files src you want to customize. The url should with protocol.
