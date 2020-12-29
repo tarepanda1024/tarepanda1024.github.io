@@ -1,7 +1,7 @@
 ---
 title: Java序列化的一些问题
 date: 2017-09-24 19:56:04
-tags:
+tags: Java
 categories: Java
 ---
 

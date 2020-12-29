@@ -2,7 +2,7 @@
 title: logrus日志按照时间分割
 date: 2017-12-11 21:49:44
 tags:
-categoris: golang
+categoris: Golang
 ---
 
 最近学习了一下go语言，发现和Java的语法差别好大啊，不过用起来的确很方便。

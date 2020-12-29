@@ -1,6 +1,6 @@
 ---
 title: Consul template源码解析
-tags: 'consul, consul-template'
+tags: ['Consul','Consul-template']
 categories: 微服务
 date: 2019-05-09 11:46:22
 ---
@@ -204,7 +204,7 @@ func (r *Runner) runTemplate(tmpl *template.Template, runCtx *templateRunCtx) (*
 		return nil, errors.Wrap(err, tmpl.Source())
 	}
 
-	//检查模板渲染所需要的数据是否都满足了，如果不满足，则加入监控列表
+	//检查模板渲染所需要的���据是否都满足了，如果不满足，则加入监控列表
 	missing, used := result.Missing, result.Used
 	for _, d := range used.List() {
 		if isLeader && !r.watcher.Watching(d) {

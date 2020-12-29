@@ -1,7 +1,7 @@
 ---
 title: Redis4.0安装及集群搭建
 date: 2017-11-29 19:25:34
-tags:
+tags: Redis
 categories: Redis
 ---
 

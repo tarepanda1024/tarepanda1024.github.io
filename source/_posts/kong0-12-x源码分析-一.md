@@ -1,7 +1,7 @@
 ---
 title: kong0.12.x源码分析(一)----kong目录结构解析
 date: 2018-04-30 09:22:44
-tags:
+tags: ['Lua','网关','Kong']
 categories: 网关
 ---
 
@@ -60,10 +60,10 @@ cmd目录下主要关注一下init.lua 。这个文件负责根据不同的指�
 ├── start.lua
 ├── stop.lua
 ├── utils
-│   ├── kill.lua
-│   ├── log.lua
-│   ├── nginx_signals.lua
-│   └── prefix_handler.lua
+│   ├── kill.lua
+│   ├── log.lua
+│   ├── nginx_signals.lua
+│   └── prefix_handler.lua
 └── version.lua
 ```
 #### core目录
@@ -83,24 +83,24 @@ dao目录下主要放置的是数据库访问相关的操作。kong目前只支�
 ```shell
 ├── dao.lua
 ├── db
-│   ├── cassandra.lua
-│   ├── init.lua
-│   └── postgres.lua
+│   ├── cassandra.lua
+│   ├── init.lua
+│   └── postgres.lua
 ├── errors.lua
 ├── factory.lua
 ├── migrations
-│   ├── cassandra.lua
-│   ├── helpers.lua
-│   └── postgres.lua
+│   ├── cassandra.lua
+│   ├── helpers.lua
+│   └── postgres.lua
 ├── model_factory.lua
 ├── schemas
-│   ├── apis.lua
-│   ├── consumers.lua
-│   ├── plugins.lua
-│   ├── ssl_certificates.lua
-│   ├── ssl_servers_names.lua
-│   ├── targets.lua
-│   └── upstreams.lua
+│   ├── apis.lua
+│   ├── consumers.lua
+│   ├── plugins.lua
+│   ├── ssl_certificates.lua
+│   ├── ssl_servers_names.lua
+│   ├── targets.lua
+│   └── upstreams.lua
 └── schemas_validation.lua
 
 ```
@@ -133,7 +133,7 @@ tools目录下放置的是一些常用的工具类，比如加密、dns服务、
 └── classic.lua
 ```
 #### templates
-templates顾名思义就是模板啦，下面主要放一些模板文件，kong_defaults.lua下面放的是一些kong的默认配置文件；nginx.lua主要放置nginx的一些启动参数；nginx_kong.lua放的是nginx的配置文件模板，kong启动时会以此为模板生成nginx.conf文件
+templates顾名思义就是模板啦，下面主要放一些模板文件，kong_defaults.lua下面放的���一些kong的默认配置文件；nginx.lua主要放置nginx的一些启动参数；nginx_kong.lua放的是nginx的配置文件模板，kong启动时会以此为模板生成nginx.conf文件
 ```shell
 .
 ├── kong_defaults.lua

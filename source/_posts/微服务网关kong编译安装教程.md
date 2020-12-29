@@ -1,6 +1,6 @@
 ---
 title: 微服务网关kong编译安装教程
-tags: 教程
+tags: ['Lua','网关','Kong']
 categories: 网关
 date: 2018-03-13 17:02:32
 ---

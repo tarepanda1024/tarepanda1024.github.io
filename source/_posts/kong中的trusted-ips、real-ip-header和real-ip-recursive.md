@@ -1,6 +1,6 @@
 ---
 title: kong中的trusted_ips、real_ip_header和real_ip_recursive
-tags: kong,nginx
+tags: ['Kong','Nginx']
 categories: 网关
 date: 2018-10-28 16:42:03
 ---
@@ -50,7 +50,7 @@ trusted_ips = 192.168.0.1/16, 10.0.0.1/8, 127.0.0.1                  # Defines t
 
 - real_ip_header 这个决定从哪里获取客户端ip
 
-- real_ip_recursive real_ip_recursive 是否递归地排除直至得到用户ip（默认为off） 
+- real_ip_recursive real_ip_recursive 是否递归地排除直至得到用户ip（默认为off） 
 
 首先，real_ip_header 指定一个http首部名称，默认是X-Real-Ip，假设用默认值的话，nginx在接收到报文后，会查看http首部X-Real-Ip。
 

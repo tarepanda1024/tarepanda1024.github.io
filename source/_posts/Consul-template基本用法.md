@@ -1,6 +1,6 @@
 ---
 title: Consul-template基本用法
-tags: 'consul,consul-template'
+tags: ['Consul','Consul-template']
 categories: 微服务
 date: 2019-05-11 14:40:23
 ---

@@ -2,7 +2,7 @@
 title: kong0.12.x源码分析(三)----kong事件通知机制
 categories: 网关
 date: 2018-07-31 20:30:01
-tags:
+tags: ['Lua','网关','Kong']
 ---
 
 

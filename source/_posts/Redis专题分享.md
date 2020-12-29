@@ -1,7 +1,7 @@
 ---
 title: Redis专题分享
 date: 2019-08-28 19:02:51
-tags:
+tags: Redis
 ---
 
 本文为一次组内的分享，主要介绍了Redis的相关知识
