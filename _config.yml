@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: LiuXiaodong
+title: 
 subtitle:
 description:
-author: LiuXiaodong
+author: 哈利土土
 language: zh-CN
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://www.xiaodongliu.com
+url: https://photon.fun/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -38,10 +38,6 @@ post_asset_folder: false
 relative_link: false
 future: true
 
-prism_plugin:
-  mode: 'preprocess'    # realtime/preprocess
-  theme: 'default'
-  line_number: true    # default false
 
 Plugins:
 - hexo-generator-baidu-sitemap
@@ -52,11 +48,15 @@ baidusitemap:
 sitemap:
     path: sitemap.xml
 
+# 关闭 highlight
 highlight:
   enable: false
-  line_number: true
-  auto_detect: false
-  tab_replace:
+# 启用 prism
+prismjs:
+  enable: true
+  preprocess: true
+  line_number: false
+  tab_replace: ""
 
 search:
   path: search.xml
@@ -90,9 +90,9 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: material
+theme: yun
 server:
-  port: 4001
+  port: 4000
   compress: true
   header: true
 # Deployment
