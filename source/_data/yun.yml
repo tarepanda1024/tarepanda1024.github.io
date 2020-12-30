@@ -103,7 +103,7 @@ local_search:
 
 google_analytics:
   enable: true
-  id: UA-XXXXXXXXX-X
+  id: G-G6100ZS3DQ
 
 tags:
   Vue: "#4fc08d"
