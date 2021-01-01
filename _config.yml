@@ -101,7 +101,7 @@ deploy:
    type: git
    repo:
          github:  ssh://git@github.com/tarepanda1024/tarepanda1024.github.io.git,master
-         #coding:  ssh://git@git.dev.tencent.com/lxd2016/lxd2016.coding.me.git,master
+         coding:  ssh://git@e.coding.net/lxd2016/blog/blog.git,master
   
 backup:
     type: git
