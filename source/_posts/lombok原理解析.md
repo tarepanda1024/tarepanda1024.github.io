@@ -1,12 +1,17 @@
 ---
-title: lombok原理解析
+title: lombok原理示例
 tags:
-categories: Java
+  - Java
+  - Lombok
+categories:
+  - Java
+date: 2020-01-21 20:10:00
 ---
+
 
 lombok采用的是编译期注解，依赖jsr269特性，修改的是AST抽象语法树
 
-<img src="//yx.mail.netease.com/wiki/file/download/1884143"/>
+![jsr269](/images/20200121/01.png)
 
 1. 添加依赖声明注解
 
@@ -63,10 +68,10 @@ public class ExposeProcessor extends AbstractProcessor {
 
 ```
 ├── java
-│   └── org
-│       └── example
-│           ├── Expose.java
-│           └── ExposeProcessor.java
+│   └── org
+│       └── example
+│           ├── Expose.java
+│           └── ExposeProcessor.java
 └── resources
     └── META-INF
         └── services

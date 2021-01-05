@@ -1,8 +1,13 @@
 ---
 title: Maven插件开发
 tags:
-categories: Java
+  - Java
+  - Maven
+categories:
+  - Java
+date: 2020-01-21 19:26:41
 ---
+
 
 1. 创建maven-plugin工程
 
