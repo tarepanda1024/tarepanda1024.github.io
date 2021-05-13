@@ -13,6 +13,13 @@ links:
     desc: 数卷禅宗语，几点相思泪！佛曰：觉有情！
     color: "#0078e7" # 代表色
     email: # 非必须
+  - url: https://www.eyeori.xyz/
+    avatar: https://cdn.jsdelivr.net/gh/YunYouJun/yunyoujun.github.io/images/avatar.jpg
+    name: 抱朴子
+    blog: Alan Fu
+    desc: 
+    color: "#0078e7" # 代表色
+    email: # 非必须
 placeholder: 还没想好说些什么 # 默认对友链的描述
 tip: 友链加载中～如失败请刷新重试～
 ---
