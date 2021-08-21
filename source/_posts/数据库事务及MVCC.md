@@ -35,7 +35,7 @@ ACID：原子性、一致性、隔离性和持久性
 
 2、由于某些原因，事务A并没有完成提交，发生了RollBack操作，则事务B读取的数据就是脏数据。
 
-![](https://tcs.teambition.net/storage/3126e9d12a3aaab471ec4ecc7581881d6b3d?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjZlOWQxMmEzYWFhYjQ3MWVjNGVjYzc1ODE4ODFkNmIzZCJ9.2aNLNNkv04C5IExBArq0Vmqrur-lQdCz8jxuRO5EBVo&download=image.png "")
+![](/images/20210821/01.png)
 
 ## 不可重复读
 
@@ -43,7 +43,7 @@ ACID：原子性、一致性、隔离性和持久性
 
 这种在同一个事务中，前后两次读取的数据不一致的现象就是不可重复读(Nonrepeatable Read)。
 
-![](https://tcs.teambition.net/storage/3126e416e7528f61465eaaa6795777d1c06b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjZlNDE2ZTc1MjhmNjE0NjVlYWFhNjc5NTc3N2QxYzA2YiJ9.3XxG61XMVdwdaLW6wmq8C9zFJY-RKzUbO0rYJM9oHco&download=image.png "")
+![](/images/20210821/02.png)
 
 
 
@@ -53,26 +53,26 @@ ACID：原子性、一致性、隔离性和持久性
 
 幻读和不可重复读有些类似，但是幻读强调的是集合的增减，而不是单条数据的更新。
 
-![](https://tcs.teambition.net/storage/3126f7af624855b76eaabf01a901d5f1c937?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjZmN2FmNjI0ODU1Yjc2ZWFhYmYwMWE5MDFkNWYxYzkzNyJ9.rf_Bc-dp0uxr3o2KxJ83-GAaE1cTgPaK5sNJsF2lMC0&download=image.png "")
+![](/images/20210821/03.png)
 
 ## 第一类更新丢失
 
 事务A和事务B都对数据进行更新，但是事务A由于某种原因事务回滚了，把已经提交的事务B的更新数据给覆盖了。这种现象就是第一类更新丢失
 
-![](https://tcs.teambition.net/storage/3126642479e16b16f324701e246ec2d9d40b?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjY2NDI0NzllMTZiMTZmMzI0NzAxZTI0NmVjMmQ5ZDQwYiJ9.xrnrFg8GR2LVKh7UQC6OGhTFGIzEdNLSXxO1wNUFCOw&download=image.png "")
+![](/images/20210821/04.png)
 
 ## 第二类更新丢失
 
 其实跟第一类更新丢失有点类似，也是两个事务同时对数据进行更新，但是事务A的更新把已提交的事务B的更新数据给覆盖了。这种现象就是第二类更新丢失。
 
-![](https://tcs.teambition.net/storage/312643396a9d686394586eee7063e1aa11f4?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjY0MzM5NmE5ZDY4NjM5NDU4NmVlZTcwNjNlMWFhMTFmNCJ9.pCqTzQlTSIl3qGET2uclyMpBduVx1DPXodN8dsWcB9g&download=image.png "")
+![](/images/20210821/05.png)
 
 
 
 
 # 事务级别
 
-![](https://tcs.teambition.net/storage/31261f82595d8e1c30b3ba07c53632fa946d?Signature=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJBcHBJRCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9hcHBJZCI6IjU5Mzc3MGZmODM5NjMyMDAyZTAzNThmMSIsIl9vcmdhbml6YXRpb25JZCI6IiIsImV4cCI6MTYyNDcxNjU3OSwiaWF0IjoxNjI0MTExNzc5LCJyZXNvdXJjZSI6Ii9zdG9yYWdlLzMxMjYxZjgyNTk1ZDhlMWMzMGIzYmEwN2M1MzYzMmZhOTQ2ZCJ9._hdRry85S-fZSvrDa87xIrFahCbG5S5j3Q4UnWKwI6c&download=image.png "")
+![](/images/20210821/06.png)
 
 ## Mysql默认事务级别
 
