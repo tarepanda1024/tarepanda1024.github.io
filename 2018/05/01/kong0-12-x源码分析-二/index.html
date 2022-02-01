@@ -1,0 +1,568 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="哈利土土"><meta name="copyright" content="哈利土土"><meta name="generator" content="Hexo 5.3.0"><meta name="theme" content="hexo-theme-yun"><title>kong0.12.x源码分析(二)----kong启动流程分析 | null</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.2.4/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><script src="https://cdn.jsdelivr.net/npm/@unocss/runtime/mini.global.js"></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/images/avatar.png"><link rel="mask-icon" href="/images/avatar.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"photon.fun","root":"/","title":"独钓寒江雪","version":"1.8.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]},"vendors":{"darken":"https://cdn.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="preconnect" href="https://www.google-analytics.com" crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id=G-G6100ZS3DQ"></script><script>if (CONFIG.hostname === location.hostname) {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G6100ZS3DQ');
+}</script><meta name="description" content="今天我们看一下kong的启动流程，kong启动时调用kong start命令，kong的启动脚本内容如下： #!&#x2F;usr&#x2F;bin&#x2F;env resty  require &quot;luarocks.loader&quot;  package.path &#x3D; &quot;.&#x2F;?.lua;.&#x2F;?&#x2F;init.lua;&quot; .. package.path  require(&quot;kong.cmd.init&quot;)(arg)  在这个脚本里，通过r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="kong0.12.x源码分析(二)----kong启动流程分析">
+<meta property="og:url" content="https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="今天我们看一下kong的启动流程，kong启动时调用kong start命令，kong的启动脚本内容如下： #!&#x2F;usr&#x2F;bin&#x2F;env resty  require &quot;luarocks.loader&quot;  package.path &#x3D; &quot;.&#x2F;?.lua;.&#x2F;?&#x2F;init.lua;&quot; .. package.path  require(&quot;kong.cmd.init&quot;)(arg)  在这个脚本里，通过r">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-05-01T01:29:17.000Z">
+<meta property="article:modified_time" content="2022-02-01T09:17:59.896Z">
+<meta property="article:author" content="哈利土土">
+<meta property="article:tag" content="Lua">
+<meta property="article:tag" content="网关">
+<meta property="article:tag" content="Kong">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button sidebar-nav-active" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel sidebar-panel-active" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">40</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">19</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content">此文章未包含目录</div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 21px; color: #4d89c0">随笔</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">kong0.12.x源码分析(二)----kong启动流程分析</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2018-05-01 09:29:17" itemprop="dateCreated datePublished" datetime="2018-05-01T09:29:17+08:00">2018-05-01</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">网关</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Lua/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Lua</span></a><a class="tag-item" href="/tags/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">网关</span></a><a class="tag-item" href="/tags/Kong/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Kong</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>今天我们看一下kong的启动流程，kong启动时调用kong start命令，kong的启动脚本内容如下：</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/usr/bin/env resty</span>
+
+require <span class="token string">"luarocks.loader"</span>
+
+package.path <span class="token operator">=</span> <span class="token string">"./?.lua;./?/init.lua;"</span> <span class="token punctuation">..</span> package.path
+
+require<span class="token punctuation">(</span><span class="token string">"kong.cmd.init"</span><span class="token punctuation">)</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span>
+</code></pre>
+<p>在这个脚本里，通过require命令，调用kong/cmd/init.lua脚本，接下来我们看一下init脚本里放了些什么</p>
+<pre class="language-lua" data-language="lua"><code class="language-lua"><span class="token keyword">local</span> pl_app <span class="token operator">=</span> require <span class="token string">"pl.lapp"</span>
+<span class="token keyword">local</span> log <span class="token operator">=</span> require <span class="token string">"kong.cmd.utils.log"</span>
+
+<span class="token keyword">local</span> options <span class="token operator">=</span> <span class="token string">[[
+ --v              verbose
+ --vv             debug
+]]</span>
+
+<span class="token keyword">local</span> cmds_arr <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span>
+<span class="token keyword">local</span> cmds <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  start <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  stop <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  quit <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  restart <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  reload <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  health <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  check <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  prepare <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  migrations <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  version <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span>
+  roar <span class="token operator">=</span> <span class="token keyword">true</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">for</span> k <span class="token keyword">in</span> <span class="token function">pairs</span><span class="token punctuation">(</span>cmds<span class="token punctuation">)</span> <span class="token keyword">do</span>
+  cmds_arr<span class="token punctuation">[</span><span class="token operator">#</span>cmds_arr<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> k
+<span class="token keyword">end</span>
+
+table<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>cmds_arr<span class="token punctuation">)</span>
+
+<span class="token keyword">local</span> help <span class="token operator">=</span> string<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">[[
+Usage: kong COMMAND [OPTIONS]
+
+The available commands are:
+ %s
+
+Options:
+%s
+]]</span><span class="token punctuation">,</span> table<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>cmds_arr<span class="token punctuation">,</span> <span class="token string">"\n "</span><span class="token punctuation">)</span><span class="token punctuation">,</span> options<span class="token punctuation">)</span>
+
+<span class="token keyword">return</span> <span class="token keyword">function</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+  <span class="token keyword">local</span> cmd_name <span class="token operator">=</span> table<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> cmd_name <span class="token keyword">then</span>
+    <span class="token function">pl_app</span><span class="token punctuation">(</span>help<span class="token punctuation">)</span>
+    pl_app<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">elseif</span> <span class="token keyword">not</span> cmds<span class="token punctuation">[</span>cmd_name<span class="token punctuation">]</span> <span class="token keyword">then</span>
+    <span class="token function">pl_app</span><span class="token punctuation">(</span>help<span class="token punctuation">)</span>
+    pl_app<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token string">"No such command: "</span> <span class="token operator">..</span> cmd_name<span class="token punctuation">)</span>
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">local</span> cmd <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"kong.cmd."</span> <span class="token operator">..</span> cmd_name<span class="token punctuation">)</span>
+  <span class="token keyword">local</span> cmd_lapp <span class="token operator">=</span> cmd<span class="token punctuation">.</span>lapp
+  <span class="token keyword">local</span> cmd_exec <span class="token operator">=</span> cmd<span class="token punctuation">.</span>execute
+
+  <span class="token keyword">if</span> cmd_lapp <span class="token keyword">then</span>
+    cmd_lapp <span class="token operator">=</span> cmd_lapp <span class="token operator">..</span> options <span class="token comment">-- append universal options</span>
+    args <span class="token operator">=</span> <span class="token function">pl_app</span><span class="token punctuation">(</span>cmd_lapp<span class="token punctuation">)</span>
+  <span class="token keyword">end</span>
+
+  <span class="token comment">-- check sub-commands</span>
+  <span class="token keyword">if</span> cmd<span class="token punctuation">.</span>sub_commands <span class="token keyword">then</span>
+    <span class="token keyword">local</span> sub_cmd <span class="token operator">=</span> table<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> sub_cmd <span class="token keyword">then</span>
+      pl_app<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">elseif</span> <span class="token keyword">not</span> cmd<span class="token punctuation">.</span>sub_commands<span class="token punctuation">[</span>sub_cmd<span class="token punctuation">]</span> <span class="token keyword">then</span>
+      pl_app<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token string">"No such command for "</span> <span class="token operator">..</span> cmd_name <span class="token operator">..</span> <span class="token string">": "</span> <span class="token operator">..</span> sub_cmd<span class="token punctuation">)</span>
+    <span class="token keyword">else</span>
+      args<span class="token punctuation">.</span>command <span class="token operator">=</span> sub_cmd
+    <span class="token keyword">end</span>
+  <span class="token keyword">end</span>
+
+  <span class="token function">xpcall</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token function">cmd_exec</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span> <span class="token keyword">end</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> <span class="token punctuation">(</span>args<span class="token punctuation">.</span>v <span class="token keyword">or</span> args<span class="token punctuation">.</span>vv<span class="token punctuation">)</span> <span class="token keyword">then</span>
+      err <span class="token operator">=</span> err<span class="token punctuation">:</span>match <span class="token string">"^.-:.-:.(.*)$"</span>
+      io<span class="token punctuation">.</span>stderr<span class="token punctuation">:</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Error: "</span> <span class="token operator">..</span> err <span class="token operator">..</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>
+      io<span class="token punctuation">.</span>stderr<span class="token punctuation">:</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"\n  Run with --v (verbose) or --vv (debug) for more details\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span>
+      <span class="token keyword">local</span> trace <span class="token operator">=</span> debug<span class="token punctuation">.</span><span class="token function">traceback</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+      io<span class="token punctuation">.</span>stderr<span class="token punctuation">:</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"Error: \n"</span><span class="token punctuation">)</span>
+      io<span class="token punctuation">.</span>stderr<span class="token punctuation">:</span><span class="token function">write</span><span class="token punctuation">(</span>trace <span class="token operator">..</span> <span class="token string">"\n"</span><span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    pl_app<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span><span class="token keyword">nil</span><span class="token punctuation">,</span> <span class="token keyword">true</span><span class="token punctuation">)</span>
+  <span class="token keyword">end</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code></pre>
+<p>init脚本我把一些日志去掉了，看的更清晰一些。pl.lapp是一个处理命令行输入的库，<a target="_blank" rel="noopener" href="https://stevedonovan.github.io/Penlight/api/libraries/pl.lapp.html">pl.lapp</a>。这个脚本的主要逻辑就是，先对输入的命令参数做校验，符合要求的话，讲会调用kong.cmd.${cmdname}脚本，那么我们启动时调用的就会是kong.cmd.start脚本。那么我们再看一下start脚本里面写的什么。</p>
+<pre class="language-lua" data-language="lua"><code class="language-lua"><span class="token keyword">local</span> prefix_handler <span class="token operator">=</span> require <span class="token string">"kong.cmd.utils.prefix_handler"</span>
+<span class="token keyword">local</span> nginx_signals <span class="token operator">=</span> require <span class="token string">"kong.cmd.utils.nginx_signals"</span>
+<span class="token keyword">local</span> conf_loader <span class="token operator">=</span> require <span class="token string">"kong.conf_loader"</span>
+<span class="token keyword">local</span> DAOFactory <span class="token operator">=</span> require <span class="token string">"kong.dao.factory"</span>
+<span class="token keyword">local</span> kill <span class="token operator">=</span> require <span class="token string">"kong.cmd.utils.kill"</span>
+<span class="token keyword">local</span> log <span class="token operator">=</span> require <span class="token string">"kong.cmd.utils.log"</span>
+
+<span class="token keyword">local</span> <span class="token keyword">function</span> <span class="token function">execute</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+  <span class="token keyword">local</span> conf <span class="token operator">=</span> <span class="token function">assert</span><span class="token punctuation">(</span><span class="token function">conf_loader</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span>conf<span class="token punctuation">,</span> <span class="token punctuation">&#123;</span>
+    prefix <span class="token operator">=</span> args<span class="token punctuation">.</span>prefix
+  <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">)</span>   <span class="token comment">--加载配置文件</span>
+
+  <span class="token function">assert</span><span class="token punctuation">(</span><span class="token keyword">not</span> kill<span class="token punctuation">.</span><span class="token function">is_running</span><span class="token punctuation">(</span>conf<span class="token punctuation">.</span>nginx_pid<span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token string">"Kong is already running in "</span> <span class="token operator">..</span> conf<span class="token punctuation">.</span>prefix<span class="token punctuation">)</span> <span class="token comment">--检查nginx是否已经在运行</span>
+
+  <span class="token keyword">local</span> err
+  <span class="token keyword">local</span> dao <span class="token operator">=</span> <span class="token function">assert</span><span class="token punctuation">(</span>DAOFactory<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">--通过数据库配置创建数据库</span>
+  <span class="token function">xpcall</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">assert</span><span class="token punctuation">(</span>prefix_handler<span class="token punctuation">.</span><span class="token function">prepare_prefix</span><span class="token punctuation">(</span>conf<span class="token punctuation">,</span> args<span class="token punctuation">.</span>nginx_conf<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">if</span> args<span class="token punctuation">.</span>run_migrations <span class="token keyword">then</span>
+      <span class="token function">assert</span><span class="token punctuation">(</span>dao<span class="token punctuation">:</span><span class="token function">run_migrations</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    <span class="token comment">--检查是否是数据库升级命令</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">local</span> ok<span class="token punctuation">,</span> err <span class="token operator">=</span> dao<span class="token punctuation">:</span><span class="token function">are_migrations_uptodate</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment">--检查数据库版本是否升级到最新</span>
+    <span class="token keyword">if</span> err <span class="token keyword">then</span>
+      <span class="token comment">-- error correctly formatted by the DAO</span>
+      <span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+      <span class="token comment">-- we cannot start, throw a very descriptive error to instruct the user</span>
+      <span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"the current database schema does not match\n"</span>                  <span class="token operator">..</span>
+            <span class="token string">"this version of Kong.\n\nPlease run `kong migrations up` "</span>     <span class="token operator">..</span>
+            <span class="token string">"first to update/initialise the database schema.\nBe aware "</span>    <span class="token operator">..</span>
+            <span class="token string">"that Kong migrations should only run from a single node, and "</span> <span class="token operator">..</span>
+            <span class="token string">"that nodes\nrunning migrations concurrently will conflict "</span>    <span class="token operator">..</span>
+            <span class="token string">"with each other and might corrupt\nyour database schema!"</span><span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    ok<span class="token punctuation">,</span> err <span class="token operator">=</span> dao<span class="token punctuation">:</span><span class="token function">check_schema_consensus</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">-- 这个主要针对 cassandra 做检查，psql不做检查</span>
+    <span class="token keyword">if</span> err <span class="token keyword">then</span>
+      <span class="token comment">-- error correctly formatted by the DAO</span>
+      <span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+      <span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Cassandra has not reached cluster consensus yet"</span><span class="token punctuation">)</span>
+    <span class="token keyword">end</span>
+
+    <span class="token function">assert</span><span class="token punctuation">(</span>nginx_signals<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">)</span>  <span class="token comment">--通过指定的配置启动nginx</span>
+
+    <span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"Kong started"</span><span class="token punctuation">)</span>
+  <span class="token keyword">end</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span>
+    err <span class="token operator">=</span> e <span class="token comment">-- cannot throw from this function</span>
+  <span class="token keyword">end</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">if</span> err <span class="token keyword">then</span>
+    log<span class="token punctuation">.</span><span class="token function">verbose</span><span class="token punctuation">(</span><span class="token string">"could not start Kong, stopping services"</span><span class="token punctuation">)</span>
+    <span class="token function">pcall</span><span class="token punctuation">(</span>nginx_signals<span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span>conf<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    log<span class="token punctuation">.</span><span class="token function">verbose</span><span class="token punctuation">(</span><span class="token string">"stopped services"</span><span class="token punctuation">)</span>
+    <span class="token function">error</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token comment">-- report to main error handler</span>
+  <span class="token keyword">end</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">local</span> lapp <span class="token operator">=</span> <span class="token string">[[
+Usage: kong start [OPTIONS]
+
+Start Kong (Nginx and other configured services) in the configured
+prefix directory.
+
+Options:
+ -c,--conf        (optional string)   configuration file
+ -p,--prefix      (optional string)   override prefix directory
+ --nginx-conf     (optional string)   custom Nginx configuration template
+ --run-migrations (optional boolean)  optionally run migrations on the DB
+]]</span>
+
+<span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+  lapp <span class="token operator">=</span> lapp<span class="token punctuation">,</span>
+  execute <span class="token operator">=</span> execute
+<span class="token punctuation">&#125;</span>
+</code></pre>
+<p>我们看到这块脚本主要的功能就是先加载配置，然后检查数据库是否更新到最新版本（这个插件更新和相关更新数据库的操作都需要执行run migrations命令，使数据库结构同步到最新），而后检查执行nginx启动命令</p>
+<pre class="language-lua" data-language="lua"><code class="language-lua"><span class="token comment">-- nginx_signals.lua</span>
+<span class="token keyword">function</span> _M<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">)</span>
+  <span class="token keyword">local</span> nginx_bin<span class="token punctuation">,</span> err <span class="token operator">=</span> _M<span class="token punctuation">.</span><span class="token function">find_nginx_bin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> nginx_bin <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> err
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">if</span> kill<span class="token punctuation">.</span><span class="token function">is_running</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">.</span>nginx_pid<span class="token punctuation">)</span> <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> <span class="token string">"nginx is already running in "</span> <span class="token operator">..</span> kong_conf<span class="token punctuation">.</span>prefix
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">local</span> cmd <span class="token operator">=</span> <span class="token function">fmt</span><span class="token punctuation">(</span><span class="token string">"%s -p %s -c %s"</span><span class="token punctuation">,</span> nginx_bin<span class="token punctuation">,</span> kong_conf<span class="token punctuation">.</span>prefix<span class="token punctuation">,</span> <span class="token string">"nginx.conf"</span><span class="token punctuation">)</span>
+
+  log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"starting nginx: %s"</span><span class="token punctuation">,</span> cmd<span class="token punctuation">)</span>
+
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> stderr <span class="token operator">=</span> pl_utils<span class="token punctuation">.</span><span class="token function">executeex</span><span class="token punctuation">(</span>cmd<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> stderr
+  <span class="token keyword">end</span>
+
+  log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"nginx started"</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">true</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">function</span> _M<span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token function">send_signal</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">,</span> <span class="token string">"TERM"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">function</span> _M<span class="token punctuation">.</span><span class="token function">quit</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">,</span> graceful<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token function">send_signal</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">,</span> <span class="token string">"QUIT"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+
+<span class="token keyword">function</span> _M<span class="token punctuation">.</span><span class="token function">reload</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> kill<span class="token punctuation">.</span><span class="token function">is_running</span><span class="token punctuation">(</span>kong_conf<span class="token punctuation">.</span>nginx_pid<span class="token punctuation">)</span> <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> <span class="token string">"nginx not running in prefix: "</span> <span class="token operator">..</span> kong_conf<span class="token punctuation">.</span>prefix
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">local</span> nginx_bin<span class="token punctuation">,</span> err <span class="token operator">=</span> _M<span class="token punctuation">.</span><span class="token function">find_nginx_bin</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> nginx_bin <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> err
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">local</span> cmd <span class="token operator">=</span> <span class="token function">fmt</span><span class="token punctuation">(</span><span class="token string">"%s -p %s -c %s -s %s"</span><span class="token punctuation">,</span>
+                  nginx_bin<span class="token punctuation">,</span> kong_conf<span class="token punctuation">.</span>prefix<span class="token punctuation">,</span> <span class="token string">"nginx.conf"</span><span class="token punctuation">,</span> <span class="token string">"reload"</span><span class="token punctuation">)</span>
+
+  log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"reloading nginx: %s"</span><span class="token punctuation">,</span> cmd<span class="token punctuation">)</span>
+
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> _<span class="token punctuation">,</span> _<span class="token punctuation">,</span> stderr <span class="token operator">=</span> pl_utils<span class="token punctuation">.</span><span class="token function">executeex</span><span class="token punctuation">(</span>cmd<span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token keyword">return</span> <span class="token keyword">nil</span><span class="token punctuation">,</span> stderr
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">return</span> <span class="token keyword">true</span>
+<span class="token keyword">end</span></code></pre>
+<p>nginx_signals脚本主要就是找到nginx的执行文件，执行start stop等命令<br>分析到这里我们可能就有点迷惑了，难道这样就完了，没见到有什么特别的地方呀。别急，kong的主要逻辑都写在ngix.conf文件中呢。上篇文章我们分析了kong会将templates里的文件编译成最终的nginx.conf，那么接下来我们看一下nginx.conf文件变成什么样子了（已经去除了一些代码）。</p>
+<pre class="language-none"><code class="language-none">worker_processes auto;
+daemon on;
+
+worker_rlimit_nofile 500000;
+
+events &#123;
+    worker_connections 16384;
+    multi_accept on;
+&#125;
+
+http &#123;
+    charset UTF-8;
+
+    # used by traffic limit
+    lua_shared_dict limit_conn_store 100m;
+
+    # used by redis cluster
+    lua_shared_dict redis_cluster_slot_locks 1m;
+
+    lua_socket_log_errors off;
+
+    init_by_lua_block &#123;
+        kong &#x3D; require &#39;kong&#39;
+        kong.init()
+     
+    &#125;
+
+    init_worker_by_lua_block &#123;
+        kong.init_worker()
+    &#125;
+
+  
+    upstream kong_upstream &#123;
+        server 0.0.0.1;
+        balancer_by_lua_block &#123;
+            kong.balancer()
+        &#125;
+        keepalive 60;
+    &#125;
+
+   
+    server &#123;
+        server_name kong;
+        listen 0.0.0.0:9000;
+        error_page 400 404 408 411 412 413 414 417 &#x2F;kong_error_handler;
+        error_page 500 502 503 504 &#x2F;kong_error_handler;
+      
+        client_body_buffer_size 60m;
+
+        real_ip_header     X-Real-IP;
+        real_ip_recursive  off;
+
+        location &#x2F; &#123;
+          
+            default_type text&#x2F;html;
+          
+            rewrite_by_lua_block &#123;
+                kong.rewrite()
+            &#125;
+
+            access_by_lua_block &#123;
+              
+                kong.access()
+            &#125;
+
+            header_filter_by_lua_block &#123;
+                kong.header_filter()
+            &#125;
+
+            body_filter_by_lua_block &#123;
+                kong.body_filter()
+            &#125;
+
+            log_by_lua_block &#123;
+                kong.log()
+            &#125;
+
+        &#125;
+
+        location &#x3D; &#x2F;kong_error_handler &#123;
+            internal;
+            content_by_lua_block &#123;
+                kong.handle_error()
+            &#125;
+        &#125;
+    &#125;
+
+    server &#123;
+        server_name kong_admin;
+        listen 127.0.0.1:9001;
+
+        client_max_body_size 10m;
+        client_body_buffer_size 10m;
+
+        listen 127.0.0.1:8444 ssl;
+  
+        location &#x2F; &#123;
+            default_type application&#x2F;json;
+            content_by_lua_block &#123;
+                kong.serve_admin_api()
+            &#125;
+        &#125;
+
+        location &#x2F;nginx_status &#123;
+            internal;
+            access_log off;
+            stub_status;
+        &#125;
+
+        location &#x2F;robots.txt &#123;
+            return 200 &#39;User-agent: *\nDisallow: &#x2F;&#39;;
+        &#125;
+    &#125;
+&#125;</code></pre>
+<p>通过分析我们看到，Kong主要是在nginx的生命周期的每个阶段插入了自己的代码，从而起到增到增强nginx的作用。那么nginx的每个请求的生命周期和kong对每个请求处理的生命周期应该是一致的。事实也正是这样的，kong的启动相关的代码主要在kong/init.lua目录中的init方法和init_worker方法</p>
+<pre class="language-lua" data-language="lua"><code class="language-lua"><span class="token keyword">function</span> Kong<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">local</span> pl_path <span class="token operator">=</span> require <span class="token string">"pl.path"</span>
+  <span class="token keyword">local</span> conf_loader <span class="token operator">=</span> require <span class="token string">"kong.conf_loader"</span>
+
+  <span class="token comment">-- retrieve kong_config</span>
+  <span class="token keyword">local</span> conf_path <span class="token operator">=</span> pl_path<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span>ngx<span class="token punctuation">.</span>config<span class="token punctuation">.</span><span class="token function">prefix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">".kong_env"</span><span class="token punctuation">)</span>
+  <span class="token keyword">local</span> config <span class="token operator">=</span> <span class="token function">assert</span><span class="token punctuation">(</span><span class="token function">conf_loader</span><span class="token punctuation">(</span>conf_path<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">local</span> dao <span class="token operator">=</span> <span class="token function">assert</span><span class="token punctuation">(</span>DAOFactory<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token comment">-- instantiate long-lived DAO</span>
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> err_t <span class="token operator">=</span> dao<span class="token punctuation">:</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token function">error</span><span class="token punctuation">(</span><span class="token function">tostring</span><span class="token punctuation">(</span>err_t<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token keyword">end</span>
+
+  <span class="token function">assert</span><span class="token punctuation">(</span>dao<span class="token punctuation">:</span><span class="token function">are_migrations_uptodate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+  <span class="token comment">-- populate singletons</span>
+  singletons<span class="token punctuation">.</span>ip <span class="token operator">=</span> ip<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+  singletons<span class="token punctuation">.</span>dns <span class="token operator">=</span> <span class="token function">dns</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span>
+  singletons<span class="token punctuation">.</span>loaded_plugins <span class="token operator">=</span> <span class="token function">assert</span><span class="token punctuation">(</span><span class="token function">load_plugins</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> dao<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  singletons<span class="token punctuation">.</span>dao <span class="token operator">=</span> dao
+  singletons<span class="token punctuation">.</span>configuration <span class="token operator">=</span> config
+
+  <span class="token function">assert</span><span class="token punctuation">(</span>core<span class="token punctuation">.</span><span class="token function">build_router</span><span class="token punctuation">(</span>dao<span class="token punctuation">,</span> <span class="token string">"init"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span></code></pre>
+<p>kong的init方法里做的事情很简单，主要是加载配置，检查数据库结构有没有更新到最新，然后加载所有的插件，最后建立路由。</p>
+<pre class="language-lua" data-language="lua"><code class="language-lua"><span class="token keyword">function</span> Kong<span class="token punctuation">.</span><span class="token function">init_worker</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token comment">-- init DAO</span>
+
+
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> err <span class="token operator">=</span> singletons<span class="token punctuation">.</span>dao<span class="token punctuation">:</span><span class="token function">init_worker</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token function">ngx_log</span><span class="token punctuation">(</span>ngx_CRIT<span class="token punctuation">,</span> <span class="token string">"could not init DB: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+
+  <span class="token comment">-- init inter-worker events</span>
+
+
+  <span class="token keyword">local</span> worker_events <span class="token operator">=</span> require <span class="token string">"resty.worker.events"</span>
+
+
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> err <span class="token operator">=</span> worker_events<span class="token punctuation">.</span><span class="token function">configure</span> <span class="token punctuation">&#123;</span>
+    shm <span class="token operator">=</span> <span class="token string">"kong_process_events"</span><span class="token punctuation">,</span> <span class="token comment">-- defined by "lua_shared_dict"</span>
+    timeout <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span>            <span class="token comment">-- life time of event data in shm</span>
+    interval <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">,</span>           <span class="token comment">-- poll interval (seconds)</span>
+
+    wait_interval <span class="token operator">=</span> <span class="token number">0.010</span><span class="token punctuation">,</span>  <span class="token comment">-- wait before retry fetching event data</span>
+    wait_max <span class="token operator">=</span> <span class="token number">0.5</span><span class="token punctuation">,</span>         <span class="token comment">-- max wait time before discarding event</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token function">ngx_log</span><span class="token punctuation">(</span>ngx_CRIT<span class="token punctuation">,</span> <span class="token string">"could not start inter-worker events: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+
+  <span class="token comment">-- init cluster_events</span>
+
+
+  <span class="token keyword">local</span> dao_factory   <span class="token operator">=</span> singletons<span class="token punctuation">.</span>dao
+  <span class="token keyword">local</span> configuration <span class="token operator">=</span> singletons<span class="token punctuation">.</span>configuration
+
+
+  <span class="token keyword">local</span> cluster_events<span class="token punctuation">,</span> err <span class="token operator">=</span> kong_cluster_events<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">&#123;</span>
+    dao                     <span class="token operator">=</span> dao_factory<span class="token punctuation">,</span>
+    poll_interval           <span class="token operator">=</span> configuration<span class="token punctuation">.</span>db_update_frequency<span class="token punctuation">,</span>
+    poll_offset             <span class="token operator">=</span> configuration<span class="token punctuation">.</span>db_update_propagation<span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> cluster_events <span class="token keyword">then</span>
+    <span class="token function">ngx_log</span><span class="token punctuation">(</span>ngx_CRIT<span class="token punctuation">,</span> <span class="token string">"could not create cluster_events: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+
+  <span class="token comment">-- init cache</span>
+
+
+  <span class="token keyword">local</span> cache<span class="token punctuation">,</span> err <span class="token operator">=</span> kong_cache<span class="token punctuation">.</span><span class="token function">new</span> <span class="token punctuation">&#123;</span>
+    cluster_events    <span class="token operator">=</span> cluster_events<span class="token punctuation">,</span>
+    worker_events     <span class="token operator">=</span> worker_events<span class="token punctuation">,</span>
+    propagation_delay <span class="token operator">=</span> configuration<span class="token punctuation">.</span>db_update_propagation<span class="token punctuation">,</span>
+    ttl               <span class="token operator">=</span> configuration<span class="token punctuation">.</span>db_cache_ttl<span class="token punctuation">,</span>
+    neg_ttl           <span class="token operator">=</span> configuration<span class="token punctuation">.</span>db_cache_ttl<span class="token punctuation">,</span>
+    resty_lock_opts   <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+      exptime <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">,</span>
+      timeout <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> cache <span class="token keyword">then</span>
+    <span class="token function">ngx_log</span><span class="token punctuation">(</span>ngx_CRIT<span class="token punctuation">,</span> <span class="token string">"could not create kong cache: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+  <span class="token keyword">local</span> ok<span class="token punctuation">,</span> err <span class="token operator">=</span> cache<span class="token punctuation">:</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"router:version"</span><span class="token punctuation">,</span> <span class="token punctuation">&#123;</span> ttl <span class="token operator">=</span> <span class="token number">0</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token string">"init"</span>
+  <span class="token keyword">end</span><span class="token punctuation">)</span>
+  <span class="token keyword">if</span> <span class="token keyword">not</span> ok <span class="token keyword">then</span>
+    <span class="token function">ngx_log</span><span class="token punctuation">(</span>ngx_CRIT<span class="token punctuation">,</span> <span class="token string">"could not set router version in cache: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span>
+    <span class="token keyword">return</span>
+  <span class="token keyword">end</span>
+
+
+  singletons<span class="token punctuation">.</span>cache          <span class="token operator">=</span> cache
+  singletons<span class="token punctuation">.</span>worker_events  <span class="token operator">=</span> worker_events
+  singletons<span class="token punctuation">.</span>cluster_events <span class="token operator">=</span> cluster_events
+
+
+  singletons<span class="token punctuation">.</span>dao<span class="token punctuation">:</span><span class="token function">set_events_handler</span><span class="token punctuation">(</span>worker_events<span class="token punctuation">)</span>
+
+
+  core<span class="token punctuation">.</span>init_worker<span class="token punctuation">.</span><span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+
+  <span class="token comment">-- run plugins init_worker context</span>
+
+
+  <span class="token keyword">for</span> _<span class="token punctuation">,</span> plugin <span class="token keyword">in</span> <span class="token function">ipairs</span><span class="token punctuation">(</span>singletons<span class="token punctuation">.</span>loaded_plugins<span class="token punctuation">)</span> <span class="token keyword">do</span>
+    plugin<span class="token punctuation">.</span>handler<span class="token punctuation">:</span><span class="token function">init_worker</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">end</span>
+<span class="token keyword">end</span></code></pre>
+<p>因为nginx是单线程的，所以很多事情只能放到定时器里来做，而nginx的定时器只可以放到init_worker阶段里做。init_worker做的主要是初始化数据库相关，然后最重要的是初始化集群管理相关逻辑（因为是采用的轮询数据库的方式，只能放到这里来做），最后调用每个插件的init_worker方法。<br>然后kong/init.lua还有一些其他方法，和nginx的生命周期相对应，这个我们后面再分析。</p>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>哈利土土</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/" title="kong0.12.x源码分析(二)----kong启动流程分析">https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul><script>document.addEventListener('copy', function (event) {
+  const clipboardData = event.clipboardData || window.clipboardData;
+  if (!clipboardData) { return; }
+  const text = window.getSelection().toString();
+  if (text) {
+    event.preventDefault();
+    clipboardData.setData('text/plain', text + '\n\n本文作者：哈利土土\n本文链接：https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/\n版权声明：本博客所有文章除特别声明外，均默认采用 CC BY-NC-SA 4.0 许可协议。');
+  }
+});</script></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2018/07/31/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89/" rel="prev" title="kong0.12.x源码分析(三)----kong事件通知机制"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">kong0.12.x源码分析(三)----kong事件通知机制</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2018/04/30/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%80/" rel="next" title="kong0.12.x源码分析(一)----kong目录结构解析"><span class="post-nav-text">kong0.12.x源码分析(一)----kong目录结构解析</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div id="disqus_thread"></div><script>const disqusConfig = function() {
+  this.page.url = "https://photon.fun/2018/05/01/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%8C/"; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = "2018/05/01/kong0-12-x源码分析-二/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  this.page.title = "kong0.12.x源码分析(二)----kong启动流程分析";
+};
+function loadDisqus() {
+  // here we will only load the disqus <script> if not already loaded
+  if (!window.DISQUS) {
+    (function() {
+      // DON'T EDIT BELOW THIS LINE
+      const d = document,
+        s = d.createElement("script");
+      s.src = "https://xiaodongliu-com.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+  // if disqus <script> is already loaded, we just reset disqus the right way
+  // see https://help.disqus.com/developer/using-disqus-on-ajax-sites
+  else {
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = disqusConfig.page.identifier;
+        this.page.url = disqusConfig.page.url;
+      },
+    });
+  }
+}</script><script src="/js/comments/disqus.js" type="module"></script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20005773号</a></div><div class="copyright"><span>&copy; 2017 – 2022 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 哈利土土</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.8.6</span></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer type="module"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div></body></html>

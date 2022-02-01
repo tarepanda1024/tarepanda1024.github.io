@@ -1,0 +1,127 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="哈利土土"><meta name="copyright" content="哈利土土"><meta name="generator" content="Hexo 5.3.0"><meta name="theme" content="hexo-theme-yun"><title>Redis4.0安装及集群搭建 | null</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.2.4/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><script src="https://cdn.jsdelivr.net/npm/@unocss/runtime/mini.global.js"></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/images/avatar.png"><link rel="mask-icon" href="/images/avatar.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"photon.fun","root":"/","title":"独钓寒江雪","version":"1.8.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]},"vendors":{"darken":"https://cdn.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="preconnect" href="https://www.google-analytics.com" crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id=G-G6100ZS3DQ"></script><script>if (CONFIG.hostname === location.hostname) {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G6100ZS3DQ');
+}</script><meta name="description" content="环境:Deepin15 (Debian8) Redis4.0安装1. 下载rediswget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.2.tar.gz 2.  编译安装cp ~&#x2F;redis-4.0.2.tar.gz  &#x2F;usr&#x2F;local&#x2F; tar -xzvf redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis4.0安装及集群搭建">
+<meta property="og:url" content="https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="环境:Deepin15 (Debian8) Redis4.0安装1. 下载rediswget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.2.tar.gz 2.  编译安装cp ~&#x2F;redis-4.0.2.tar.gz  &#x2F;usr&#x2F;local&#x2F; tar -xzvf redis">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-29T11:25:34.000Z">
+<meta property="article:modified_time" content="2022-02-01T09:17:59.895Z">
+<meta property="article:author" content="哈利土土">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">40</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">19</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Redis4-0%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">Redis4.0安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BDredis"><span class="toc-number">1.1.</span> <span class="toc-text">1. 下载redis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">2.  编译安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.</span> <span class="toc-text">3.  测试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">集群配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9C%A8redis4-0%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%BB%BA%E7%AB%8Bcluster%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%8C%E5%B9%B6%E5%BB%BA%E7%AB%8B%EF%BC%96%E4%B8%AAredis-conf%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="toc-number">2.1.</span> <span class="toc-text">1.  在redis4.0目录下建立cluster文件夹，并建立６个redis-conf文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AF%B9%E6%AF%8F%E4%B8%AAredis-conf%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BF%AE%E6%94%B9%E4%BB%A5%E4%B8%8B%E5%87%A0%E4%B8%AA%E6%9D%A1%E7%9B%AE%EF%BC%8C%E6%B3%A8%E6%84%8F%E7%AB%AF%E5%8F%A3%E5%8F%B7%E5%92%8Cnodes%E6%96%87%E4%BB%B6%E5%90%8D%E7%A7%B0%E8%A6%81%E5%92%8C%E6%96%87%E4%BB%B6%E5%A4%B9%E4%BF%9D%E6%8C%81%E4%B8%80%E8%87%B4"><span class="toc-number">2.2.</span> <span class="toc-text">2 . 对每个redis.conf文件，修改以下几个条目，注意端口号和nodes文件名称要和文件夹保持一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%93-%E5%AE%89%E8%A3%85ruby%E7%8E%AF%E5%A2%83"><span class="toc-number">2.3.</span> <span class="toc-text">３. 安装ruby环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%94-%E5%88%87%E6%8D%A2%E5%88%B0redis-4-0-2%E7%9A%84src%E7%9B%AE%E5%BD%95%E4%B8%AD%EF%BC%8C%E6%89%A7%E8%A1%8C%E4%BB%A5%E4%B8%8B%E5%91%BD%E4%BB%A4"><span class="toc-number">2.4.</span> <span class="toc-text">４.　切换到redis-4.0.2的src目录中，执行以下命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%A4%96%E7%BD%91%E8%BF%9E%E6%8E%A5"><span class="toc-number">2.5.</span> <span class="toc-text">5. 外网连接</span></a></li></ol></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 21px; color: #4d89c0">随笔</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Redis4.0安装及集群搭建</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2017-11-29 19:25:34" itemprop="dateCreated datePublished" datetime="2017-11-29T19:25:34+08:00">2017-11-29</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/Redis/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">Redis</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Redis/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Redis</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>环境:Deepin15 (Debian8)</p>
+<h2 id="Redis4-0安装"><a href="#Redis4-0安装" class="headerlink" title="Redis4.0安装"></a>Redis4.0安装</h2><h3 id="1-下载redis"><a href="#1-下载redis" class="headerlink" title="1. 下载redis"></a>1. 下载redis</h3><pre class="language-none"><code class="language-none">wget http:&#x2F;&#x2F;download.redis.io&#x2F;releases&#x2F;redis-4.0.2.tar.gz</code></pre>
+<h3 id="2-编译安装"><a href="#2-编译安装" class="headerlink" title="2.  编译安装"></a>2.  编译安装</h3><pre class="language-none"><code class="language-none">cp ~&#x2F;redis-4.0.2.tar.gz  &#x2F;usr&#x2F;local&#x2F;
+tar -xzvf redis-4.0.2.tar.gz
+cd redis-4.0.2
+make
+</code></pre>
+<p>编译完成后会提示执行 <code>make  test</code> 命令，执行后可能报错，提示缺少tcl，那么我们需要安装一下</p>
+<pre class="language-none"><code class="language-none">apt-get install tcl</code></pre>
+<p>不报错之后，执行 <code>make install</code> 命令;这样就安装好了</p>
+<h3 id="3-测试"><a href="#3-测试" class="headerlink" title="3.  测试"></a>3.  测试</h3><p>执行 <code>redis-server</code>命令,就采用默认配置启动了,而后，我们执行<code>redis-cli</code>进入交互命令行，可以通过<code>ping</code>命令看看是否安装成功，通过<code>shutdown</code>命令关闭redis服务</p>
+<h2 id="集群配置"><a href="#集群配置" class="headerlink" title="集群配置"></a>集群配置</h2><p>我们在单机上采用三主三从配置</p>
+<h3 id="1-在redis4-0目录下建立cluster文件夹，并建立６个redis-conf文件夹"><a href="#1-在redis4-0目录下建立cluster文件夹，并建立６个redis-conf文件夹" class="headerlink" title="1.  在redis4.0目录下建立cluster文件夹，并建立６个redis-conf文件夹"></a>1.  在redis4.0目录下建立cluster文件夹，并建立６个redis-conf文件夹</h3><pre class="language-none"><code class="language-none">mkdir cluster
+cd cluster
+mkdir 7000 7001 7002 7003 7004 7005
+cp ..&#x2F;redis.conf 7000&#x2F;
+cp ..&#x2F;redis.conf 7001&#x2F;
+cp ..&#x2F;redis.conf 7002&#x2F;
+cp ..&#x2F;redis.conf 7003&#x2F;
+cp ..&#x2F;redis.conf 7004&#x2F;
+cp ..&#x2F;redis.conf 7005&#x2F;</code></pre>
+<h3 id="2-对每个redis-conf文件，修改以下几个条目，注意端口号和nodes文件名称要和文件夹保持一致"><a href="#2-对每个redis-conf文件，修改以下几个条目，注意端口号和nodes文件名称要和文件夹保持一致" class="headerlink" title="2 . 对每个redis.conf文件，修改以下几个条目，注意端口号和nodes文件名称要和文件夹保持一致"></a>2 . 对每个redis.conf文件，修改以下几个条目，注意端口号和nodes文件名称要和文件夹保持一致</h3><pre class="language-none"><code class="language-none">port 7000
+cluster-enabled yes
+cluster-config-file nodes_7000.conf
+cluster-node-timeout 5000
+appendonly yes
+daemonize yes</code></pre>
+<p>修改完成后切换到每个目录中，执行</p>
+<pre class="language-none"><code class="language-none">redis-server redis.conf</code></pre>
+<p>命令（可以写个bash文件批量处理）</p>
+<h3 id="３-安装ruby环境"><a href="#３-安装ruby环境" class="headerlink" title="３. 安装ruby环境"></a>３. 安装ruby环境</h3><pre class="language-none"><code class="language-none">apt-get install ruby
+gem install redis</code></pre>
+<h3 id="４-切换到redis-4-0-2的src目录中，执行以下命令"><a href="#４-切换到redis-4-0-2的src目录中，执行以下命令" class="headerlink" title="４.　切换到redis-4.0.2的src目录中，执行以下命令"></a>４.　切换到redis-4.0.2的src目录中，执行以下命令</h3><pre class="language-bash" data-language="bash"><code class="language-bash">./redis-trib.rb  create --replicas <span class="token number">1</span> <span class="token number">127.0</span>.0.1:7000 <span class="token number">127.0</span>.0.1:7001 <span class="token number">127.0</span>.0.1:7002 <span class="token number">127.0</span>.0.1:7003 <span class="token number">127.0</span>.0.1:7004 <span class="token number">127.0</span>.0.1:7005</code></pre>
+<p>执行<code>./redis-trib.rb check 127.0.0.1:7000 </code>来判断测试是否正常<br>最后我们可以通过<code> redis-cli -c -p 7000</code> 来连接集群</p>
+<h3 id="5-外网连接"><a href="#5-外网连接" class="headerlink" title="5. 外网连接"></a>5. 外网连接</h3><p>注释掉这一行(为了安全,redis默认开启)：<code>bind 127.0.0.1</code><br>调整<code>protected-mode yes</code>为<code>protected-mode no</code><br>同时创建集群时也需要指定本机IP：<br> <pre class="language-bash" data-language="bash"><code class="language-bash">./redis-trib.rb  create --replicas <span class="token number">1</span> xxx:7000 xxx:7001 xxx:7002 xxx:7003 xxx:7004 xxx:7005</code></pre></p>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>哈利土土</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" title="Redis4.0安装及集群搭建">https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul><script>document.addEventListener('copy', function (event) {
+  const clipboardData = event.clipboardData || window.clipboardData;
+  if (!clipboardData) { return; }
+  const text = window.getSelection().toString();
+  if (text) {
+    event.preventDefault();
+    clipboardData.setData('text/plain', text + '\n\n本文作者：哈利土土\n本文链接：https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/\n版权声明：本博客所有文章除特别声明外，均默认采用 CC BY-NC-SA 4.0 许可协议。');
+  }
+});</script></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2017/12/01/nuxt%E4%BD%BF%E7%94%A8element-ui2-x%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/" rel="prev" title="nuxt使用element ui2.x踩坑记录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">nuxt使用element ui2.x踩坑记录</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2017/11/27/OpenResty%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95/" rel="next" title="OpenResty 安装记录"><span class="post-nav-text">OpenResty 安装记录</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div id="disqus_thread"></div><script>const disqusConfig = function() {
+  this.page.url = "https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/"; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = "2017/11/29/Redis4-0安装及集群搭建/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  this.page.title = "Redis4.0安装及集群搭建";
+};
+function loadDisqus() {
+  // here we will only load the disqus <script> if not already loaded
+  if (!window.DISQUS) {
+    (function() {
+      // DON'T EDIT BELOW THIS LINE
+      const d = document,
+        s = d.createElement("script");
+      s.src = "https://xiaodongliu-com.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+  // if disqus <script> is already loaded, we just reset disqus the right way
+  // see https://help.disqus.com/developer/using-disqus-on-ajax-sites
+  else {
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = disqusConfig.page.identifier;
+        this.page.url = disqusConfig.page.url;
+      },
+    });
+  }
+}</script><script src="/js/comments/disqus.js" type="module"></script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20005773号</a></div><div class="copyright"><span>&copy; 2017 – 2022 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 哈利土土</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.8.6</span></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer type="module"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div></body></html>

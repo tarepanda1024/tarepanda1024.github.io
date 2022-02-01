@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="哈利土土"><meta name="copyright" content="哈利土土"><meta name="generator" content="Hexo 5.3.0"><meta name="theme" content="hexo-theme-yun"><title>Consul-template基本用法 | null</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/star-markdown-css@0.2.4/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="//at.alicdn.com/t/font_1140697_dxory92pb0h.js" async></script><script src="https://cdn.jsdelivr.net/npm/@unocss/runtime/mini.global.js"></script><script src="https://cdn.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/images/avatar.png"><link rel="mask-icon" href="/images/avatar.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"photon.fun","root":"/","title":"独钓寒江雪","version":"1.8.6","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/avatar/none.jpg","say":{"api":"https://v1.hitokoto.cn","hitokoto":true},"local_search":{"path":"/search.xml"},"fireworks":{"colors":["102, 167, 221","62, 131, 225","33, 78, 194"]},"vendors":{"darken":"https://cdn.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="preconnect" href="https://www.google-analytics.com" crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id=G-G6100ZS3DQ"></script><script>if (CONFIG.hostname === location.hostname) {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G6100ZS3DQ');
+}</script><meta name="description" content="consul-template是consul公司开发的一款监控consul服务变化并自动生成配置文件的工具。生成配置文件后，也可以执行指定的一些命令。随着应用微服务化越来越流行，不少公司都开始使用consul了，当consul的监控的服务发生变化时，我们可能会自动重启nginx或者redis等服务。consul-template就是应用在此种场景中。 安装 为了运行consul-template，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Consul-template基本用法">
+<meta property="og:url" content="https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="consul-template是consul公司开发的一款监控consul服务变化并自动生成配置文件的工具。生成配置文件后，也可以执行指定的一些命令。随着应用微服务化越来越流行，不少公司都开始使用consul了，当consul的监控的服务发生变化时，我们可能会自动重启nginx或者redis等服务。consul-template就是应用在此种场景中。 安装 为了运行consul-template，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-05-11T06:40:23.000Z">
+<meta property="article:modified_time" content="2022-02-01T09:17:59.894Z">
+<meta property="article:author" content="哈利土土">
+<meta property="article:tag" content="Consul">
+<meta property="article:tag" content="Consul-template">
+<meta name="twitter:card" content="summary"><script>(function() {
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script defer src="https://cdn.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-list-ordered"></use></svg></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-passport-line"></use></svg></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-desciption"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-home-4-line"></use></svg></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-archive-line"></use></svg></span><span class="site-state-item-count">40</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-2-line"></use></svg></span><span class="site-state-item-count">10</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="site-state-item-count">19</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-contrast-2-line"></use></svg></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C"><span class="toc-number">2.</span> <span class="toc-text">运行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8consul"><span class="toc-number">2.1.</span> <span class="toc-text">启动consul</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8consul-template"><span class="toc-number">2.2.</span> <span class="toc-text">启动consul-template</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%9D%BF%E8%AF%AD%E6%B3%95"><span class="toc-number">2.4.</span> <span class="toc-text">模板语法</span></a></li></ol></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 21px; color: #4d89c0">随笔</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">Consul-template基本用法</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-calendar-line"></use></svg></span> <time title="创建时间：2019-05-11 14:40:23" itemprop="dateCreated datePublished" datetime="2019-05-11T14:40:23+08:00">2019-05-11</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-folder-line"></use></svg></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">微服务</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/Consul/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Consul</span></a><a class="tag-item" href="/tags/Consul-template/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-price-tag-3-line"></use></svg></span><span class="tag-name">Consul-template</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>consul-template是consul公司开发的一款监控consul服务变化并自动生成配置文件的工具。生成配置文件后，也可以执行指定的一些命令。随着应用微服务化越来越流行，不少公司都开始使用consul了，当consul的监控的服务发生变化时，我们可能会自动重启nginx或者redis等服务。consul-template就是应用在此种场景中。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p> 为了运行<code>consul-template</code>，需要先启动<code>consul</code>服务。<code>consul</code>和<code>consul-template</code>均是采用go语言编写的，可以到<a target="_blank" rel="noopener" href="https://www.consul.io/">consul官网</a>以及<a target="_blank" rel="noopener" href="https://releases.hashicorp.com/consul-template/">consul-template官网</a>下载二进制包。</p>
+<h2 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h2><h3 id="启动consul"><a href="#启动consul" class="headerlink" title="启动consul"></a>启动<code>consul</code></h3><pre class="language-shell" data-language="shell"><code class="language-shell">consul agent -dev #加上-dev参数,consul可以当做master节点运行</code></pre>
+<h3 id="启动consul-template"><a href="#启动consul-template" class="headerlink" title="启动consul-template"></a>启动<code>consul-template</code></h3><p>首先我们需要编写一个模板文件(in.tpl):</p>
+<pre class="language-none"><code class="language-none">&#123;&#123; key &quot;foo&quot; &#125;&#125;</code></pre>
+<p>然后执行启动命令:</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">consul-template -template &quot;in.tpl:out.txt&quot; -once #添加-once参数后，consul-template运行一次就会退出</code></pre>
+<p>接着我们向<code>consul kv</code>存储中添加一对键值:</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">consul kv put foo bar</code></pre>
+<p>最后，我们可以看到当前目录下生成了一个<code>out.txt</code>文件:</p>
+<pre class="language-txt" data-language="txt"><code class="language-txt">bar</code></pre>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>上面的例子是官方提供的，可以供测试使用，实际使用的时候大多会通过指定配置文件的方式启动</p>
+<pre class="language-shell" data-language="shell"><code class="language-shell">consul-template -config &quot;&#x2F;my&#x2F;config.hcl&quot;</code></pre>
+<p>consul-template的不少配置项需要注意下一下</p>
+<pre class="language-json" data-language="json"><code class="language-json">#config.hcl
+consul <span class="token punctuation">&#123;</span>
+ #consul集群相关配置
+  auth <span class="token punctuation">&#123;</span>
+    enabled  = <span class="token boolean">true</span>
+    username = <span class="token string">"test"</span>
+    password = <span class="token string">"test"</span>
+  <span class="token punctuation">&#125;</span>
+
+  address = <span class="token string">"127.0.0.1:8500"</span>
+  token = <span class="token string">"abcd1234"</span>
+　#当consul集群返回异常信息时<span class="token punctuation">,</span>consul-template不会挂掉，而是会不断重试
+  retry <span class="token punctuation">&#123;</span>
+    enabled = <span class="token boolean">true</span>
+    attempts = <span class="token number">12</span>
+    backoff = <span class="token string">"250ms"</span>
+    max_backoff = <span class="token string">"1m"</span>
+  <span class="token punctuation">&#125;</span>
+
+
+#通常情况下，consul-template会从consul集群的leader节点拉取配置，
+#当consul特别繁忙时，我们可以选择从follower节点拉取数据，此配置代表最大容忍的数据陈旧时间
+max_stale = <span class="token string">"10m"</span>
+
+#为了防止配置经常修改导致模板不断被渲染，影响系统的稳定
+#我们可以设置此参数，此参数控制模板两次渲染之间的间隔时间
+wait <span class="token punctuation">&#123;</span>
+  min = <span class="token string">"5s"</span>
+  max = <span class="token string">"10s"</span>
+<span class="token punctuation">&#125;</span>
+
+#下面这个参数很重要。consul-template从consul中取数据时采用的是阻塞的方法
+#（consul-template设置的默认超时时间为1min，并且不能修改），
+#假设一个模板依赖<span class="token number">50</span>个资源，一共有<span class="token number">50</span>个consul-template实例的话，就会有<span class="token number">2500</span>个阻塞请求，
+#会对consul造成比较大的压力
+#打开deduplicate参数的话，consul-template会自动组成一个集群，leader节点会监控所有的资源，并将整合后的资源再存储到consul中
+#其他consul-template节点对于这个模板只用监控这一个key即可
+#不过在<span class="token number">0.18</span>.<span class="token number">5</span>版本，此处有bug<span class="token punctuation">,</span>具体可以看https<span class="token operator">:</span><span class="token comment">//github.com/hashicorp/consul-template/blob/master/CHANGELOG.md</span>
+deduplicate <span class="token punctuation">&#123;</span>
+  enabled = <span class="token boolean">true</span>
+  prefix = <span class="token string">"consul-template/dedup/"</span>
+<span class="token punctuation">&#125;</span>
+
+＃配置模板
+template <span class="token punctuation">&#123;</span>
+  source = <span class="token string">"/path/on/disk/to/template.ctmpl"</span>
+  destination = <span class="token string">"/path/on/disk/where/template/will/render.txt"</span>
+  create_dest_dirs = <span class="token boolean">true</span>
+  contents = <span class="token string">"&#123;&#123; keyOrDefault \"service/redis/maxconns@east-aws\" \"5\" &#125;&#125;"</span>
+  command = <span class="token string">"restart service foo"</span>
+  command_timeout = <span class="token string">"60s"</span>
+  error_on_missing_key = <span class="token boolean">false</span>
+  perms = <span class="token number">0600</span>
+  backup = <span class="token boolean">true</span>
+  left_delimiter  = <span class="token string">"&#123;&#123;"</span>
+  right_delimiter = <span class="token string">"&#125;&#125;"</span>
+  wait <span class="token punctuation">&#123;</span>
+    min = <span class="token string">"2s"</span>
+    max = <span class="token string">"10s"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+<h3 id="模板语法"><a href="#模板语法" class="headerlink" title="模板语法"></a>模板语法</h3><p>consul-tempate的语法其实采用是go本身的模板语法，在此基础上添加了不少自定义函数</p>
+<pre class="language-none"><code class="language-none">&#123;&#123; key &quot;service&#x2F;redis&#x2F;maxconns&quot; &#125;&#125;</code></pre>
+<p>key其实是consul-template提供的一个函数，支持从consul中取值。</p>
+<p>同时consul-template也提供了诸如<code>datacenters file  keyExists  keyOrDefault</code>等函数，具体可以参考官方文档<a target="_blank" rel="noopener" href="https://github.com/hashicorp/consul-template#templating-language">https://github.com/hashicorp/consul-template#templating-language</a></p>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>哈利土土</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/" title="Consul-template基本用法">https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><svg class="icon"><use xlink:href="#icon-creative-commons-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-by-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-nc-line"></use></svg><svg class="icon"><use xlink:href="#icon-creative-commons-sa-line"></use></svg></a> 许可协议。</li></ul><script>document.addEventListener('copy', function (event) {
+  const clipboardData = event.clipboardData || window.clipboardData;
+  if (!clipboardData) { return; }
+  const text = window.getSelection().toString();
+  if (text) {
+    event.preventDefault();
+    clipboardData.setData('text/plain', text + '\n\n本文作者：哈利土土\n本文链接：https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/\n版权声明：本博客所有文章除特别声明外，均默认采用 CC BY-NC-SA 4.0 许可协议。');
+  }
+});</script></article><div class="post-nav"><div class="post-nav-item"><a class="post-nav-prev" href="/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/" rel="prev" title="API网关Kong云端部署调研"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-left-s-line"></use></svg><span class="post-nav-text">API网关Kong云端部署调研</span></a></div><div class="post-nav-item"><a class="post-nav-next" href="/2019/05/09/Consul-template%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/" rel="next" title="Consul template源码解析"><span class="post-nav-text">Consul template源码解析</span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-right-s-line"></use></svg></a></div></div></div><div class="hty-card" id="comment"><div id="disqus_thread"></div><script>const disqusConfig = function() {
+  this.page.url = "https://photon.fun/2019/05/11/Consul-template%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95/"; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = "2019/05/11/Consul-template基本用法/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  this.page.title = "Consul-template基本用法";
+};
+function loadDisqus() {
+  // here we will only load the disqus <script> if not already loaded
+  if (!window.DISQUS) {
+    (function() {
+      // DON'T EDIT BELOW THIS LINE
+      const d = document,
+        s = d.createElement("script");
+      s.src = "https://xiaodongliu-com.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+  // if disqus <script> is already loaded, we just reset disqus the right way
+  // see https://help.disqus.com/developer/using-disqus-on-ajax-sites
+  else {
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = disqusConfig.page.identifier;
+        this.page.url = disqusConfig.page.url;
+      },
+    });
+  }
+}</script><script src="/js/comments/disqus.js" type="module"></script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20005773号</a></div><div class="copyright"><span>&copy; 2017 – 2022 </span><span class="with-love" id="animate"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-cloud-line"></use></svg></span><span class="author"> 哈利土土</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v5.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.8.6</span></div></footer><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-arrow-up-s-line"></use></svg><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-search-line"></use></svg></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="/js/search/local-search.js" defer type="module"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-close-line"></use></svg></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div id="local-search-result"></div></div></div></body></html>
