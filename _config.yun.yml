@@ -1,0 +1,120 @@
+avatar:
+  url: /images/avatar.png
+  rounded: true
+  opacity: 1
+favicon: /images/avatar.png
+social:
+  - name: GitHub
+    link: https://github.com/tarepanda1024
+    icon: icon-github-line
+    color: "#181717"
+  - name: E-Mail
+    link: mailto:liuxd2017@163.com
+    icon: icon-mail-line
+    color: "#8E71C1"
+  - name: 知乎
+    link: https://www.zhihu.com/people/liu-xiao-dong-40-19/activities
+    icon: icon-zhihu-line
+    color: "#0084FF"
+
+menu:
+  custom:
+    title: 文档
+    path: https://yun.yunyoujun.cn
+    icon: icon-settings-line
+
+
+banner:
+  enable: true
+  title: 独钓寒江雪
+  src: /js/ui/banner.js
+  border: true
+  cloud:
+    enable: true
+    color: "white"
+  go_down:
+    enable: true
+    icon: icon-arrow-down-s-line
+
+sidebar:
+  bg_image: https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/stars-timing-1.jpg
+  bg_position: bottom 3rem center
+  tagcloud:
+    enable: true
+    amount: 20
+
+pages:
+  - name: 我的小伙伴们
+    url: /links/index.html
+    icon: icon-genderless-line
+    color: dodgerblue
+
+codeblock:
+  copy_btn: true
+  prismjs:
+    light: default
+    dark: tomorrow
+
+creative_commons:
+  license: by-nc-sa
+  post: true
+  language: deed.zh
+  clipboard: true
+
+post_meta:
+  item_text: false
+  created_at: true
+  updated_at: false
+  categories: true
+  tags: true
+
+reward:
+  enable: false
+
+footer:
+  since: 2017
+  beian:
+    enable: true
+    icp: 浙ICP备20005773号
+
+wordcloud:
+  enable: true
+
+disqus:
+  enable: true
+  shortname: xiaodongliu-com
+  count: false
+
+comment:
+  enable: true
+  tips:
+  candidates:
+    - disqus
+
+github_issues:
+  enable: false
+
+engine_search:
+  enable: false
+
+local_search:
+  enable: true
+  src: /js/search/local-search.js
+
+google_analytics:
+  enable: true
+  id: G-G6100ZS3DQ
+
+tags:
+  Vue: "#4fc08d"
+  Hexo: "#0E834D"
+  CSS: "#5298d1"
+  Node.js: "#026E00"
+  Git: "#F14E32"
+  React: "#61dafb"
+  Python: "#3776ab"
+  PHP: "#8892BF"
+  Java: "#0066B8"
+  JavaScript: "#F4DF4F"
+  TypeScript: "#317AC6"
+  Laravel: "#F4645F"
