@@ -41,6 +41,7 @@ html.dark {
   --hty-link-color: #0078e7;
   --hty-gray-color: #999;
   --hty-yellow-color: #ff8718;
+  --blockquote-border-left-color: var(--smc-border-color);
 }
 .primary {
   color: #005eb4;
@@ -123,7 +124,7 @@ html.dark {
   --hty-secondary-text-color: #555;
   --post-block-bg-color: #fff;
   --smc-link-color: #0078e7;
-  --yun-bg-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/stars-timing-0-blur-30px.jpg");
+  --yun-bg-image: url("https://cdn.yunyoujun.cn/img/bg/stars-timing-0-blur-30px.jpg");
   --banner-line-color: #000;
   --banner-char-color: #000;
 }
@@ -134,7 +135,7 @@ html.dark {
   --hty-secondary-text-color: #eee;
   --post-block-bg-color: #1b1f2e;
   --smc-link-color: #3ca1ff;
-  --yun-bg-image: url("https://cdn.jsdelivr.net/gh/YunYouJun/cdn/img/bg/galaxy.jpg");
+  --yun-bg-image: url("https://cdn.yunyoujun.cn/img/bg/galaxy.jpg");
   --banner-line-color: #fff;
   --banner-char-color: #fff;
   --banner-char-bg-color: rgba(0,0,0,0.5);
@@ -338,6 +339,44 @@ body::before {
   align-items: center;
   height: 100vh;
 }
+#banner .char {
+  font-family: 'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif;
+  font-size: var(--banner-char-size, 1rem);
+  font-weight: 900;
+  background-color: var(--banner-char-bg-color);
+  line-height: 1;
+  transition-property: all;
+  transition-duration: 0.3s;
+  transition-delay: 0s;
+}
+#banner .char:hover {
+  color: var(--banner-char-hover-color);
+  background-color: var(--banner-char-color);
+}
+#banner .char-left,
+#banner .char-right {
+  display: flex;
+  color: var(--banner-char-color);
+  opacity: 0;
+}
+#banner .char-left {
+  border-left: 1px solid var(--banner-line-color);
+  border-right: 0px solid rgba(0,120,231,0.1);
+  border-right-width: 0px;
+  animation-duration: 0.4s;
+  animation-delay: 0.4s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+#banner .char-right {
+  border-left: 0px solid rgba(0,120,231,0.1);
+  border-right: 1px solid var(--banner-line-color);
+  border-left-width: 0px;
+  animation-duration: 0.4s;
+  animation-delay: 0.4s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
 .banner-char-container {
   display: flex;
   flex-direction: column;
@@ -356,44 +395,6 @@ body::before {
 .vertical-line-bottom {
   position: absolute;
   bottom: 0;
-}
-.char {
-  font-family: 'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif;
-  font-size: var(--banner-char-size, 1rem);
-  font-weight: 900;
-  background-color: var(--banner-char-bg-color);
-  line-height: 1;
-  transition-property: all;
-  transition-duration: 0.3s;
-  transition-delay: 0s;
-}
-.char:hover {
-  color: var(--banner-char-hover-color);
-  background-color: var(--banner-char-color);
-}
-.char-left,
-.char-right {
-  display: flex;
-  color: var(--banner-char-color);
-  opacity: 0;
-}
-.char-left {
-  border-left: 1px solid var(--banner-line-color);
-  border-right: 0px solid rgba(0,120,231,0.1);
-  border-right-width: 0px;
-  animation-duration: 0.4s;
-  animation-delay: 0.4s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
-}
-.char-right {
-  border-left: 0px solid rgba(0,120,231,0.1);
-  border-right: 1px solid var(--banner-line-color);
-  border-left-width: 0px;
-  animation-duration: 0.4s;
-  animation-delay: 0.4s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
 }
 .cloud {
   display: flex;
@@ -1536,6 +1537,7 @@ body::before {
   color: var(--hty-text-color);
   font-weight: 400;
   font-family: 'PingFang SC', 'Microsoft YaHei', Roboto, Arial, sans-serif;
+  padding: 1rem 0;
 }
 .markdown-body code,
 .markdown-body pre {
@@ -1543,7 +1545,7 @@ body::before {
 }
 .markdown-body blockquote {
   padding: 0.6rem 1rem;
-  border-left: 4px solid var(--blockquote-border-left-color);
+  border-left: 4px solid var(--blockquote-border-left-color, --smc-border-color);
   background-color: var(--blockquote-bg-color, rgba(0,120,231,0.05));
 }
 .markdown-body blockquote p {
@@ -1555,6 +1557,7 @@ body::before {
 }
 .markdown-body iframe {
   border: none;
+  width: 100%;
 }
 .post-nav {
   display: flex;
@@ -1962,7 +1965,7 @@ body::before {
   color: #999;
   display: block;
 }
-.site-desciption {
+.site-description {
   color: var(--hty-secondary-text-color);
   font-size: 0.8rem;
 }
@@ -2041,31 +2044,32 @@ body::before {
 #local-search-input {
   outline: none;
 }
-#local-search-result {
+.search-result-container {
   overflow: auto;
   margin: 0;
   padding: 0.5rem 0 1rem 0;
   height: calc(100% - 160px);
 }
-#local-search-result ul.search-result-list {
+.search-result-container ul.search-result-list {
   margin: 0;
   padding: 0;
 }
-#local-search-result ul.search-result-list li {
+.search-result-container ul.search-result-list li {
   display: block;
   width: 100%;
   padding: 0.6rem 0;
 }
-#local-search-result ul.search-result-list li .search-result-title {
+.search-result-container ul.search-result-list li .search-result-title {
   font-family: 'Songti SC', 'Noto Serif SC', STZhongsong, STKaiti, KaiTi, Roboto, serif;
   font-weight: 900;
   font-size: 1.2rem;
 }
-#local-search-result ul.search-result-list li .search-result {
+.search-result-container ul.search-result-list li .search-result {
   margin: 0;
   font-size: 0.8rem;
 }
-#local-search-result ul.search-result-list li .search-result .search-keyword {
+.search-result-container ul.search-result-list li .search-result .search-keyword {
+  background: transparent;
   color: #f00;
   font-style: normal;
   text-decoration: underline;
@@ -2152,12 +2156,6 @@ body::before {
 #github-issues {
   margin: 1rem;
 }
-.v[data-class=v] p {
-  color: var(--hty-text-color) !important;
-}
-.v[data-class=v] p code {
-  color: #000;
-}
 #say {
   color: var(--hty-text-color);
   display: block;
@@ -2174,6 +2172,19 @@ body::before {
 #say #say-from {
   display: block;
 }
+iframe.bilibili-video {
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16/9;
+}
+.heimu {
+  background-color: var(--hty-text-color);
+  transition: 0.2s;
+}
+.heimu:hover {
+  cursor: pointer;
+  background-color: transparent;
+}
 .hidden {
   display: none;
 }
@@ -2188,6 +2199,17 @@ body::before {
 }
 .flex-col {
   flex-direction: column;
+}
+.justfiy-center {
+  justify-content: center;
+}
+.items-center {
+  align-items: center;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .w-full {
   width: 100%;

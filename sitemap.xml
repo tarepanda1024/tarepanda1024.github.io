@@ -6,6 +6,8 @@
     
     <lastmod>2023-02-06</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -13,6 +15,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -20,6 +24,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -27,6 +33,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -34,6 +42,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -41,6 +51,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -48,6 +60,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -55,6 +69,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -62,20 +78,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/12/11/logrus%E6%97%A5%E5%BF%97%E6%8C%89%E7%85%A7%E6%97%B6%E9%97%B4%E5%88%86%E5%89%B2/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/12/01/nuxt%E4%BD%BF%E7%94%A8element-ui2-x%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -83,20 +87,26 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2020/11/18/%E5%87%8C%E6%99%A8%E5%B0%8F%E8%AE%B0/</loc>
+    <loc>https://photon.fun/2017/12/11/logrus%E6%97%A5%E5%BF%97%E6%8C%89%E7%85%A7%E6%97%B6%E9%97%B4%E5%88%86%E5%89%B2/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2021/03/27/%E5%AD%97%E8%8A%82%E7%A0%81%E5%B7%A5%E5%85%B7Javassist%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</loc>
+    <loc>https://photon.fun/2017/12/01/nuxt%E4%BD%BF%E7%94%A8element-ui2-x%E8%B8%A9%E5%9D%91%E8%AE%B0%E5%BD%95/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -104,13 +114,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2019/01/15/%E5%BC%80%E6%BA%90API%E7%BD%91%E5%85%B3Tyk%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/</loc>
+    <loc>https://photon.fun/2020/11/18/%E5%87%8C%E6%99%A8%E5%B0%8F%E8%AE%B0/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -118,6 +132,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -125,6 +141,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2021/03/27/%E5%AD%97%E8%8A%82%E7%A0%81%E5%B7%A5%E5%85%B7Javassist%E4%BD%BF%E7%94%A8%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -132,6 +159,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2019/01/15/%E5%BC%80%E6%BA%90API%E7%BD%91%E5%85%B3Tyk%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -139,6 +177,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -146,6 +186,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -153,20 +195,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/12/10/electron%E5%AE%89%E8%A3%85%E5%8D%A1node-install-js%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/06/17/hello-world/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -174,20 +204,26 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2018/07/31/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89/</loc>
+    <loc>https://photon.fun/2017/12/10/electron%E5%AE%89%E8%A3%85%E5%8D%A1node-install-js%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2019/03/15/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%94/</loc>
+    <loc>https://photon.fun/2017/06/17/hello-world/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -195,6 +231,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2018/07/31/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%B8%89/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -202,6 +249,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -209,6 +258,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2019/03/15/kong0-12-x%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90-%E4%BA%94/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -216,34 +276,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2019/08/15/Golang%E5%B0%8F%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2018/10/28/Java%E4%B8%AD%E7%9A%84TreeSet%E8%A7%A3%E6%9E%90/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2019/12/04/JavaAgent%E5%AD%A6%E4%B9%A0/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/09/24/Java%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -251,34 +285,35 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2021/01/05/Java%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6ContentType/</loc>
+    <loc>https://photon.fun/2019/08/15/Golang%E5%B0%8F%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</loc>
+    <loc>https://photon.fun/2019/12/04/JavaAgent%E5%AD%A6%E4%B9%A0/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2020/01/21/Maven%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91/</loc>
+    <loc>https://photon.fun/2017/09/24/Java%E5%BA%8F%E5%88%97%E5%8C%96%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2017/11/27/OpenResty%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -286,6 +321,53 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2018/10/28/Java%E4%B8%AD%E7%9A%84TreeSet%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2017/11/27/OpenResty%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2020/01/21/Maven%E6%8F%92%E4%BB%B6%E5%BC%80%E5%8F%91/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2017/11/29/Redis4-0%E5%AE%89%E8%A3%85%E5%8F%8A%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2021/01/05/Java%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6ContentType/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -293,20 +375,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2020/01/01/2020%E5%B9%B4%E8%A7%84%E5%88%92/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -314,20 +384,17 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://photon.fun/2019/05/09/Consul-template%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <loc>https://photon.fun/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/</loc>
     
     <lastmod>2022-02-01</lastmod>
     
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/2020/01/13/Etcd%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</loc>
-    
-    <lastmod>2022-02-01</lastmod>
-    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -335,6 +402,35 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2020/01/13/Etcd%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2019/05/09/Consul-template%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/2020/01/01/2020%E5%B9%B4%E8%A7%84%E5%88%92/</loc>
+    
+    <lastmod>2022-02-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
   <url>
@@ -342,6 +438,8 @@
     
     <lastmod>2022-02-01</lastmod>
     
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
   
 
@@ -354,222 +452,222 @@
 
   
   <url>
-    <loc>https://photon.fun/tags/Redis/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://photon.fun/tags/%E9%9A%8F%E7%AC%94/</loc>
     <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://photon.fun/tags/%E6%80%BB%E7%BB%93/</loc>
     <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Consul/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Consul-template/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Golang/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Java/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Istio/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Maven/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Lua/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/%E7%BD%91%E5%85%B3/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Kong/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Nginx/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Lombok/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/%E5%AD%97%E8%8A%82%E7%A0%81/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/Mysql/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://photon.fun/tags/doris/</loc>
     <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Consul/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Consul-template/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Istio/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Golang/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Java/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Maven/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Redis/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Lua/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/%E7%BD%91%E5%85%B3/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Kong/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Nginx/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Lombok/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/Mysql/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/tags/%E5%AD%97%E8%8A%82%E7%A0%81/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
 
   
   <url>
-    <loc>https://photon.fun/categories/Redis/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://photon.fun/categories/%E9%9A%8F%E7%AC%94/</loc>
     <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/%E7%BD%91%E5%85%B3/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/%E5%88%86%E4%BA%AB/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/Java/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/SeviceMesh/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/%E5%B7%A5%E5%85%B7/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/%E5%89%8D%E7%AB%AF/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://photon.fun/categories/Mysql/</loc>
-    <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://photon.fun/categories/doris/</loc>
     <lastmod>2023-02-06</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/%E7%BD%91%E5%85%B3/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/SeviceMesh/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/%E5%88%86%E4%BA%AB/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/Java/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/Redis/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/%E5%89%8D%E7%AB%AF/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://photon.fun/categories/Mysql/</loc>
+    <lastmod>2023-02-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
   </url>
   
 </urlset>
