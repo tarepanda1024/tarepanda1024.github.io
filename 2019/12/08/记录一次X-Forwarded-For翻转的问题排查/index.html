@@ -13,12 +13,12 @@ document.addEventListener("pjax:success", initScrollReveal);
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-G6100ZS3DQ');
-}</script><meta name="description" content="背景 &amp;emsp;&amp;emsp;最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。   &amp;emsp;&amp;emsp;打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这">
+}</script><meta name="description" content="背景   最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。   打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这件事情由边缘网关（基于kong）来做比较合适。   网关小组为此开发了一个插">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记录一次X-Forwarded-For翻转的问题排查">
 <meta property="og:url" content="https://photon.fun/2019/12/08/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1X-Forwarded-For%E7%BF%BB%E8%BD%AC%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="背景 &amp;emsp;&amp;emsp;最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。   &amp;emsp;&amp;emsp;打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这">
+<meta property="og:description" content="背景   最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。   打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这件事情由边缘网关（基于kong）来做比较合适。   网关小组为此开发了一个插">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://photon.fun/images/2019120700.png">
 <meta property="og:image" content="https://photon.fun/images/2019120701.jpg">
@@ -44,71 +44,79 @@ IconifyProviders = {
     // Wait for 1 second before switching API hosts
     rotate: 1000,
   },
-};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">41</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">11</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">20</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">排查过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">综述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E9%9C%B2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">暴露的问题</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/doris/" style="font-size: 12px; color: #999">doris</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 21px; color: #4d89c0">随笔</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2019/12/08/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1X-Forwarded-For%E7%BF%BB%E8%BD%AC%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">记录一次X-Forwarded-For翻转的问题排查</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2019-12-08 12:36:20" itemprop="dateCreated datePublished" datetime="2019-12-08T12:36:20+08:00">2019-12-08</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">网关</span></a></span></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p> &amp;emsp;&amp;emsp;最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。  </p>
-<p>&amp;emsp;&amp;emsp;打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这件事情由边缘网关（基于kong）来做比较合适。</p>
-<p>&amp;emsp;&amp;emsp;网关小组为此开发了一个插件，插件做的事情是拿到downstream的IP，然后从CMDB中查到这个IP对应的服务编码，最终把服务编码信息放到Header中传到业务方。  </p>
-<p>&amp;emsp;&amp;emsp;插件运行了一段时间，有一个业务反馈拿不到服务编码。网关小组就是在此情况下开始了问题的排查。</p>
-<h2 id="排查过程"><a href="#排查过程" class="headerlink" title="排查过程"></a>排查过程</h2><p>&amp;emsp;&amp;emsp;我们先看一下请求的流程：</p>
-<p><img src="/images/2019120700.png" alt="请求流程" loading="lazy"></p>
-<p>&amp;emsp;&amp;emsp;然后看一下边缘网关的accesslog：  </p>
-<p><img src="/images/2019120701.jpg" alt="边缘网关accesslog日志" loading="lazy"></p>
-<p>&amp;emsp;&amp;emsp;可以看到：remote address是：10.xx.xx.114(入口nginx地址) ， XFF中的信息为：10.xx.xx.120(node层地址)。那么业务方收到的XFF是什么呢？是：10.xx.xx.120,10.xx.xx.114 。</p>
-<p>&amp;emsp;&amp;emsp;到这里可以看到问题有三个：</p>
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">42</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">12</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">21</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%92%E6%9F%A5%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">排查过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%BC%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">综述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E9%9C%B2%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">5.</span> <span class="toc-text">暴露的问题</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/doris/" style="font-size: 12px; color: #999">doris</a> <a href="/tags/linux/" style="font-size: 12px; color: #999">linux</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2019/12/08/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1X-Forwarded-For%E7%BF%BB%E8%BD%AC%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">记录一次X-Forwarded-For翻转的问题排查</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2019-12-08 12:36:20" itemprop="dateCreated datePublished" datetime="2019-12-08T12:36:20+08:00">2019-12-08</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">网关</span></a></span></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><h2 id="背景">背景</h2>
+<p>  最近严选的服务在上云，上云后由于IP是不固定的，那么通过IP黑白名单鉴权的手段已经不太能够满足现实情况了。</p>
+<p>  打算通过在Header中放入服务编码的方式来进行鉴权。如果是云内的服务A调用云内的服务B，那么服务A的sidecar(istio-envoy)就可以向请求中注入服务编码信息；如果是从云外访问云内的话，这件事情由边缘网关（基于kong）来做比较合适。</p>
+<p>  网关小组为此开发了一个插件，插件做的事情是拿到downstream的IP，然后从CMDB中查到这个IP对应的服务编码，最终把服务编码信息放到Header中传到业务方。</p>
+<p>  插件运行了一段时间，有一个业务反馈拿不到服务编码。网关小组就是在此情况下开始了问题的排查。</p>
+<h2 id="排查过程">排查过程</h2>
+<p>  我们先看一下请求的流程：</p>
+<p><img src="/images/2019120700.png" alt="" loading="lazy"></p>
+<p>  然后看一下边缘网关的accesslog：</p>
+<p><img src="/images/2019120701.jpg" alt="" loading="lazy"></p>
+<p>  可以看到：remote address是：10.xx.xx.114(入口nginx地址) ， XFF中的信息为：10.xx.xx.120(node层地址)。那么业务方收到的XFF是什么呢？是：10.xx.xx.120,10.xx.xx.114 。</p>
+<p>  到这里可以看到问题有三个：</p>
 <ol>
 <li>为什么网关收到到remote address是：10.xx.xx.114(入口nginx地址)，而不是预想的10.xx.xx.120(node层地址) ？</li>
 <li>为什么网关收到的XFF是10.xx.xx.120(node层地址)，而不是预想的：客户端IP，10.xx.xx.114(入口nginx地址)？</li>
 <li>为什么业务方收到的XFF不对并且是翻转的呢？</li>
 </ol>
-<p>&amp;emsp;&amp;emsp;因为有不少业务都已经上云了，所以第一反应边缘网关应该没有问题。同时根据全链路ID的组成来看：<code>10.xx.xx.36(yanxuan-ianus)^xxxxx^9313374</code>，此ID是由网关生成的，前面的节点没有接入全链路监控（node层是接入了全链路监控的）。  </p>
-<p>&amp;emsp;&amp;emsp;猜测：node层（consul-nginx作为sidecar）和边缘网关之间可能还有一层。  </p>
-<p>&amp;emsp;&amp;emsp;假设：node层和边缘网关层中间还经过了10.xx.xx.114这台入口nginx</p>
-<p>&amp;emsp;&amp;emsp;结论：第一个和第二个问题勉强说的通了（不过xff还有点问题，没有客户端IP）。</p>
-<p>&amp;emsp;&amp;emsp;悖论：边缘网关收到的Host头是：online.xxx.mail.saas，这种Host应该是不经过入口nginx的。</p>
-<p>&amp;emsp;&amp;emsp;为了验证测试，从SA询问得知：</p>
+<p>  因为有不少业务都已经上云了，所以第一反应边缘网关应该没有问题。同时根据全链路ID的组成来看：<code>10.xx.xx.36(yanxuan-ianus)^xxxxx^9313374</code>，此ID是由网关生成的，前面的节点没有接入全链路监控（node层是接入了全链路监控的）。</p>
+<p>  猜测：node层（consul-nginx作为sidecar）和边缘网关之间可能还有一层。</p>
+<p>  假设：node层和边缘网关层中间还经过了10.xx.xx.114这台入口nginx</p>
+<p>  结论：第一个和第二个问题勉强说的通了（不过xff还有点问题，没有客户端IP）。</p>
+<p>  悖论：边缘网关收到的Host头是：online.xxx.mail.saas，这种Host应该是不经过入口nginx的。</p>
+<p>  为了验证测试，从SA询问得知：</p>
 <ol>
 <li>这种域名（online.xxx.mail.saas）是不经过入口nginx的</li>
 <li>查了一下这个点的日志，可以看到有这条请求是从客户端直接到node层的，客户端IP是：183.xx.xx.131 。</li>
 </ol>
-<p>&amp;emsp;&amp;emsp;看来node层和边缘网关中间应该没有其他节点了，猜测不成立。  </p>
-<p>&amp;emsp;&amp;emsp;查了一下node机器上的consul-nginx日志，consul-nginx作为sidecar，对所有的请求头都是透传的，没有做修改。</p>
-<p>&amp;emsp;&amp;emsp;node机器上的consul-nginx如下：<br><img src="/images/2019120702.jpg" alt="consul-nginx日志" loading="lazy"></p>
-<p>&amp;emsp;&amp;emsp;consul-nginx显示：下一跳直接到边缘网关了，没有经过其他节点。consul-nginx收到的xff是：10.xx.xx.120(node本机IP)。</p>
-<p>&amp;emsp;&amp;emsp;这个日志说明:</p>
+<p>  看来node层和边缘网关中间应该没有其他节点了，猜测不成立。</p>
+<p>  查了一下node机器上的consul-nginx日志，consul-nginx作为sidecar，对所有的请求头都是透传的，没有做修改。</p>
+<p>  node机器上的consul-nginx如下：<br>
+<img src="/images/2019120702.jpg" alt="" loading="lazy"></p>
+<p>  consul-nginx显示：下一跳直接到边缘网关了，没有经过其他节点。consul-nginx收到的xff是：10.xx.xx.120(node本机IP)。</p>
+<p>  这个日志说明:</p>
 <ol>
 <li>网关获取remote address的方式有问题。</li>
 <li>node层可能对xff头做了覆盖操作，不然consul-nginx显示对xff应该是：183.xx.xx.131（客户端IP）。</li>
 </ol>
-<p>&amp;emsp;&amp;emsp;边缘网关日志中打印的是：<code>$remote_addr</code>，仔细查一下官方文档，可以看到这个变量的意思是客户端IP <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html">http://nginx.org/en/docs/http/ngx_http_core_module.html</a> , 没有明确说明一定是上一跳的地址。  </p>
-<p>&amp;emsp;&amp;emsp;查了相关资料后发现：real_ip_modul可能会更改client address。同时网关是基于kong的二次开发，kong默认开启了real_ip模块，对比之后可以看出很有可能是real_ip_module修改了remote_addr这个变量的值。</p>
+<p>  边缘网关日志中打印的是：<code>$remote_addr</code>，仔细查一下官方文档，可以看到这个变量的意思是客户端IP <a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_core_module.html">http://nginx.org/en/docs/http/ngx_http_core_module.html</a> , 没有明确说明一定是上一跳的地址。</p>
+<p>  查了相关资料后发现：real_ip_modul可能会更改client address。同时网关是基于kong的二次开发，kong默认开启了real_ip模块，对比之后可以看出很有可能是real_ip_module修改了remote_addr这个变量的值。</p>
 <blockquote>
 <p>The ngx_http_realip_module module is used to change the client address and optional port to those sent in the specified header field.</p>
 </blockquote>
-<p>&amp;emsp;&amp;emsp;在real_ip_module的文档中，可以看到<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">http://nginx.org/en/docs/http/ngx_http_realip_module.html</a> </p>
+<p>  在real_ip_module的文档中，可以看到<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_realip_module.html">http://nginx.org/en/docs/http/ngx_http_realip_module.html</a></p>
 <blockquote>
-<p>Syntax:	real_ip_header field | X-Real-IP | X-Forwarded-For | proxy_protocol;<br>Default:	real_ip_header X-Real-IP;<br>Context:	http, server, location  </p>
+<p>Syntax:	real_ip_header field | X-Real-IP | X-Forwarded-For | proxy_protocol;<br>
+Default:	real_ip_header X-Real-IP;<br>
+Context:	http, server, location</p>
 </blockquote>
-<p>&amp;emsp;&amp;emsp;默认是从X-Real-IP中取值赋值到remote_addr中的。为了取到原始的remote_addr值，可以用realip_remote_addr这个变量。这个点以前没有注意到。</p>
-<p>&amp;emsp;&amp;emsp;到这里脉络基本清晰了，猜测如下：</p>
+<p>  默认是从X-Real-IP中取值赋值到remote_addr中的。为了取到原始的remote_addr值，可以用realip_remote_addr这个变量。这个点以前没有注意到。</p>
+<p>  到这里脉络基本清晰了，猜测如下：</p>
 <ol>
 <li>网关从x-real-ip头中取到了了一个remote_addr，然后追加到xff中，导致应用服务收到了xff是翻转的。</li>
 <li>Node层可能追加了一个x-real-ip，并且对xff做了覆盖重写。</li>
 </ol>
-<p>&amp;emsp;&amp;emsp;验证：  </p>
+<p>  验证：</p>
 <ol>
 <li>查看Node层的请求日志：日志很简单，只打印了请求URL以及目标服务的consul-nginx地址，无法看到其他信息。</li>
 <li>从pm2工具隐藏的日志中看到了采样的部分请求的完整请求头，从中明确的看到了，入口nginx传了一个X-real-ip，node层追加了入口nginx的地址到x-real-ip中同时对xff做了清除，赋值本机IP到xff中。</li>
 </ol>
-<p>&amp;emsp;&amp;emsp;结论：上述猜测成立</p>
-<h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><ol>
+<p>  结论：上述猜测成立</p>
+<h2 id="综述">综述</h2>
+<ol>
 <li>node层传到网关的xff为本机IP，x-real-ip为：客户端IP，入口nginxIP 。</li>
 <li>边缘网关根据x-real-ip中拿到了入口nginxIP作为客户端IP，然后追加到xff中；导致应用看到的xff好像是翻转的。</li>
 </ol>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><ol>
+<h2 id="解决办法">解决办法</h2>
+<ol>
 <li>网关需要采用realip_remote_addr变量来获取和网关直连的节点IP。</li>
 <li>网关需要调整remote_addr的获取方法，从xff中获取，同时real_ip_recursive设置为off （取和网关直连的客户端IP）。</li>
 <li>Node层需要明确自身的地位：如果node作为代理层，就需要正确追加xff；如果node层把自己作为应用服务器，就需要完全清除代理服务器相关的Header。</li>
 </ol>
-<h2 id="暴露的问题"><a href="#暴露的问题" class="headerlink" title="暴露的问题"></a>暴露的问题</h2><ol>
+<h2 id="暴露的问题">暴露的问题</h2>
+<ol>
 <li>对nginx对相关变量和参数对了解程度还不够，其他业务没有反应这个问题主要是因为链路不太一致，也有可能没有看到这个问题，不能靠巧合编程。</li>
 <li>node层接入的全链路sdk应该有问题，导致链路追踪不全面。</li>
 <li>node层打印的accesslog日志也不够清晰，需要补充完善。</li>

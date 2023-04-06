@@ -13,12 +13,12 @@ document.addEventListener("pjax:success", initScrollReveal);
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-G6100ZS3DQ');
-}</script><meta name="description" content="调研的版本如下：  Kong: v1.2.1 KongIngressController: v0.5.0 Minikube: v1.2.0  设计思想Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。 无数据库模式无数据库模式下，kong">
+}</script><meta name="description" content="调研的版本如下：  Kong: v1.2.1 KongIngressController: v0.5.0 Minikube: v1.2.0  设计思想 Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。 无数据库模式 无数据库模式下，ko">
 <meta property="og:type" content="article">
 <meta property="og:title" content="API网关Kong云端部署调研">
 <meta property="og:url" content="https://photon.fun/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/index.html">
 <meta property="og:site_name">
-<meta property="og:description" content="调研的版本如下：  Kong: v1.2.1 KongIngressController: v0.5.0 Minikube: v1.2.0  设计思想Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。 无数据库模式无数据库模式下，kong">
+<meta property="og:description" content="调研的版本如下：  Kong: v1.2.1 KongIngressController: v0.5.0 Minikube: v1.2.0  设计思想 Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。 无数据库模式 无数据库模式下，ko">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://photon.fun/images/2019071019/dbless-deployment.png">
 <meta property="og:image" content="https://photon.fun/images/2019071019/db-deployment.png">
@@ -47,27 +47,38 @@ IconifyProviders = {
     // Wait for 1 second before switching API hosts
     rotate: 1000,
   },
-};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">41</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">11</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">20</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">无数据库模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">高可用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">依赖数据库模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">高可用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">安装使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8k8s%E9%9B%86%E7%BE%A4"><span class="toc-number">2.1.</span> <span class="toc-text">启动k8s集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAKongIngressController"><span class="toc-number">2.2.</span> <span class="toc-text">创建KongIngressController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.</span> <span class="toc-text">创建服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAIngress"><span class="toc-number">2.4.</span> <span class="toc-text">创建Ingress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BIP"><span class="toc-number">2.5.</span> <span class="toc-text">查看IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95echo%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.6.</span> <span class="toc-text">测试echo服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%8F%92%E4%BB%B6"><span class="toc-number">2.7.</span> <span class="toc-text">添加插件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRD%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90"><span class="toc-number">3.</span> <span class="toc-text">CRD自定义资源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KongPlugin"><span class="toc-number">3.1.</span> <span class="toc-text">KongPlugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KongIngress"><span class="toc-number">3.2.</span> <span class="toc-text">KongIngress</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#annotations"><span class="toc-number">4.</span> <span class="toc-text">annotations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kubernetes-io-ingress-class"><span class="toc-number">4.1.</span> <span class="toc-text">kubernetes.io&#x2F;ingress.class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugins-konghq-com"><span class="toc-number">4.2.</span> <span class="toc-text">plugins.konghq.com</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configuration-konghq-com"><span class="toc-number">4.3.</span> <span class="toc-text">configuration.konghq.com</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8CIstio%E7%BB%93%E5%90%88"><span class="toc-number">5.</span> <span class="toc-text">和Istio结合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">6.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">7.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">8.</span> <span class="toc-text">参考文档</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/doris/" style="font-size: 12px; color: #999">doris</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 21px; color: #4d89c0">随笔</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">API网关Kong云端部署调研</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2019-07-10 19:28:49" itemprop="dateCreated datePublished" datetime="2019-07-10T19:28:49+08:00">2019-07-10</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">网关</span></a></span></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>调研的版本如下：</p>
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">42</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">12</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">21</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">1.</span> <span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.1.</span> <span class="toc-text">无数据库模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">高可用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BE%9D%E8%B5%96%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">依赖数据库模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8-2"><span class="toc-number">1.2.1.</span> <span class="toc-text">高可用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E4%BD%BF%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">安装使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8k8s%E9%9B%86%E7%BE%A4"><span class="toc-number">2.1.</span> <span class="toc-text">启动k8s集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAKongIngressController"><span class="toc-number">2.2.</span> <span class="toc-text">创建KongIngressController</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.</span> <span class="toc-text">创建服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAIngress"><span class="toc-number">2.4.</span> <span class="toc-text">创建Ingress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8BIP"><span class="toc-number">2.5.</span> <span class="toc-text">查看IP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95echo%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.6.</span> <span class="toc-text">测试echo服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%8F%92%E4%BB%B6"><span class="toc-number">2.7.</span> <span class="toc-text">添加插件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CRD%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B5%84%E6%BA%90"><span class="toc-number">3.</span> <span class="toc-text">CRD自定义资源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#KongPlugin"><span class="toc-number">3.1.</span> <span class="toc-text">KongPlugin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#KongIngress"><span class="toc-number">3.2.</span> <span class="toc-text">KongIngress</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#annotations"><span class="toc-number">4.</span> <span class="toc-text">annotations</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kubernetes-io-ingress-class"><span class="toc-number">4.1.</span> <span class="toc-text">kubernetes.io&#x2F;ingress.class</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plugins-konghq-com"><span class="toc-number">4.2.</span> <span class="toc-text">plugins.konghq.com</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configuration-konghq-com"><span class="toc-number">4.3.</span> <span class="toc-text">configuration.konghq.com</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%92%8CIstio%E7%BB%93%E5%90%88"><span class="toc-number">5.</span> <span class="toc-text">和Istio结合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E7%82%B9"><span class="toc-number">6.</span> <span class="toc-text">优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">7.</span> <span class="toc-text">缺点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">8.</span> <span class="toc-text">参考文档</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/doris/" style="font-size: 12px; color: #999">doris</a> <a href="/tags/linux/" style="font-size: 12px; color: #999">linux</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2019/07/10/API%E7%BD%91%E5%85%B3Kong%E4%BA%91%E7%AB%AF%E9%83%A8%E7%BD%B2%E8%B0%83%E7%A0%94/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">API网关Kong云端部署调研</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2019-07-10 19:28:49" itemprop="dateCreated datePublished" datetime="2019-07-10T19:28:49+08:00">2019-07-10</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/%E7%BD%91%E5%85%B3/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">网关</span></a></span></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><p>调研的版本如下：</p>
 <ul>
 <li>Kong: v1.2.1</li>
 <li>KongIngressController: v0.5.0</li>
 <li>Minikube: v1.2.0</li>
 </ul>
-<h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><p>Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。</p>
-<h3 id="无数据库模式"><a href="#无数据库模式" class="headerlink" title="无数据库模式"></a>无数据库模式</h3><p>无数据库模式下，kongIngressController作为sidecar和Kong实例一起部署在数据平面。<br><img src="/images/2019071019/dbless-deployment.png" alt="dbless-deployment" loading="lazy"></p>
-<h4 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h4><p>在此种模式下，通过增加副本数就可以达到高可用</p>
-<h3 id="依赖数据库模式"><a href="#依赖数据库模式" class="headerlink" title="依赖数据库模式"></a>依赖数据库模式</h3><p>当有数据库时，KongIngressController单独部署在控制平面，监听ApiServer变更，将数据存储到数据库中。Kong实例依然在数据平面，从数据库中拉取数据。</p>
-<p><img src="/images/2019071019/db-deployment.png" alt="db-deployment" loading="lazy"></p>
-<h4 id="高可用-1"><a href="#高可用-1" class="headerlink" title="高可用"></a>高可用</h4><p>此种模式，Kong和KongIngressController分别部署在控制平面和数据平面，可以单独扩容。KongIngressController可以存在多个，但是同一时刻只有一个master节点。Kong实例可以部署成DaemonSet，也可以采用自动扩容的策略进行高可用。</p>
-<h2 id="安装使用"><a href="#安装使用" class="headerlink" title="安装使用"></a>安装使用</h2><h3 id="启动k8s集群"><a href="#启动k8s集群" class="headerlink" title="启动k8s集群"></a>启动k8s集群</h3><pre class="language-bash" data-language="bash"><code class="language-bash">minikube start
+<h2 id="设计思想">设计思想</h2>
+<p>Kong主要通过KongIngressController来支持云端网关。KongIngressController总体设计思想是监听k8s的APIServer，将k8s的Ingress资源转换成Kong的配置。</p>
+<h3 id="无数据库模式">无数据库模式</h3>
+<p>无数据库模式下，kongIngressController作为sidecar和Kong实例一起部署在数据平面。<br>
+<img src="/images/2019071019/dbless-deployment.png" alt="" loading="lazy"></p>
+<h4 id="高可用">高可用</h4>
+<p>在此种模式下，通过增加副本数就可以达到高可用</p>
+<h3 id="依赖数据库模式">依赖数据库模式</h3>
+<p>当有数据库时，KongIngressController单独部署在控制平面，监听ApiServer变更，将数据存储到数据库中。Kong实例依然在数据平面，从数据库中拉取数据。</p>
+<p><img src="/images/2019071019/db-deployment.png" alt="" loading="lazy"></p>
+<h4 id="高可用-2">高可用</h4>
+<p>此种模式，Kong和KongIngressController分别部署在控制平面和数据平面，可以单独扩容。KongIngressController可以存在多个，但是同一时刻只有一个master节点。Kong实例可以部署成DaemonSet，也可以采用自动扩容的策略进行高可用。</p>
+<h2 id="安装使用">安装使用</h2>
+<h3 id="启动k8s集群">启动k8s集群</h3>
+<pre class="language-bash" data-language="bash"><code class="language-bash">minikube start
 minikube dashboard</code></pre>
-<h3 id="创建KongIngressController"><a href="#创建KongIngressController" class="headerlink" title="创建KongIngressController"></a>创建KongIngressController</h3><blockquote>
+<h3 id="创建KongIngressController">创建KongIngressController</h3>
+<blockquote>
 <p>此种方式创建的是带有数据库模式</p>
 </blockquote>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -sL https://bit.ly/kong-ingress <span class="token operator">|</span> kubectl create -f -</code></pre>
-<p><img src="/images/2019071019/kong-ingress-k8s.png" alt="KongIngress" loading="lazy"></p>
-<h3 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h3><pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -sL https://bit.ly/echo-server <span class="token operator">|</span> kubectl apply -f -</code></pre>
-<h3 id="创建Ingress"><a href="#创建Ingress" class="headerlink" title="创建Ingress"></a>创建Ingress</h3><pre class="language-bash" data-language="bash"><code class="language-bash"> <span class="token builtin class-name">echo</span> <span class="token string">"
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://bit.ly/kong-ingress <span class="token operator">|</span> kubectl create <span class="token parameter variable">-f</span> -</code></pre>
+<p><img src="/images/2019071019/kong-ingress-k8s.png" alt="" loading="lazy"></p>
+<h3 id="创建服务">创建服务</h3>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-sL</span> https://bit.ly/echo-server <span class="token operator">|</span> kubectl apply <span class="token parameter variable">-f</span> -</code></pre>
+<h3 id="创建Ingress">创建Ingress</h3>
+<pre class="language-bash" data-language="bash"><code class="language-bash"> <span class="token builtin class-name">echo</span> <span class="token string">"
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -80,13 +91,16 @@ spec:
         backend:
           serviceName: echo
           servicePort: 80
-"</span> <span class="token operator">|</span> kubectl apply -f -</code></pre>
-<h3 id="查看IP"><a href="#查看IP" class="headerlink" title="查看IP"></a>查看IP</h3><pre class="language-bash" data-language="bash"><code class="language-bash">minikube <span class="token function">service</span> -n kong kong-proxy --url</code></pre>
-
-<p><img src="/images/2019071019/minikube-ip.png" alt="minikube-ip" loading="lazy"><br>第一个是Http端口，第二个是Https端口</p>
-<h3 id="测试echo服务"><a href="#测试echo服务" class="headerlink" title="测试echo服务"></a>测试echo服务</h3><pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -i http://192.168.99.100:32649/foo</code></pre>
+"</span> <span class="token operator">|</span> kubectl apply <span class="token parameter variable">-f</span> -</code></pre>
+<h3 id="查看IP">查看IP</h3>
+<pre class="language-bash" data-language="bash"><code class="language-bash">minikube <span class="token function">service</span> <span class="token parameter variable">-n</span> kong kong-proxy <span class="token parameter variable">--url</span></code></pre>
+<p><img src="/images/2019071019/minikube-ip.png" alt="" loading="lazy"><br>
+第一个是Http端口，第二个是Https端口</p>
+<h3 id="测试echo服务">测试echo服务</h3>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-i</span> http://192.168.99.100:32649/foo</code></pre>
 <p>此时就可以看到返回的集群信息</p>
-<h3 id="添加插件"><a href="#添加插件" class="headerlink" title="添加插件"></a>添加插件</h3><blockquote>
+<h3 id="添加插件">添加插件</h3>
+<blockquote>
 <p>KongIngressController自定义了许多资源，现在添加一个request-id插件测试一下</p>
 </blockquote>
 <pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"
@@ -97,8 +111,7 @@ metadata:
 config:
   header_name: my-request-id
 plugin: correlation-id
-"</span> <span class="token operator">|</span> kubectl apply -f -</code></pre>
-
+"</span> <span class="token operator">|</span> kubectl apply <span class="token parameter variable">-f</span> -</code></pre>
 <pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -115,16 +128,18 @@ spec:
         backend:
           serviceName: echo
           servicePort: 80
-"</span> <span class="token operator">|</span> kubectl apply -f -</code></pre>
+"</span> <span class="token operator">|</span> kubectl apply <span class="token parameter variable">-f</span> -</code></pre>
 <p>此时访问</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -i -H <span class="token string">"Host:example.com"</span> http://192.168.99.100:32649/bar</code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-i</span> <span class="token parameter variable">-H</span> <span class="token string">"Host:example.com"</span> http://192.168.99.100:32649/bar</code></pre>
 <p>可以看到返回的消息体中就带有my-request-id了</p>
-<p><img src="/images/2019071019/requestId.png" alt="requestId" loading="lazy"></p>
+<p><img src="/images/2019071019/requestId.png" alt="" loading="lazy"></p>
 <p>plugin插件除了可以添加到ingress上面，还可以添加到service上面，这里就不细说了。</p>
-<h2 id="CRD自定义资源"><a href="#CRD自定义资源" class="headerlink" title="CRD自定义资源"></a>CRD自定义资源</h2><blockquote>
+<h2 id="CRD自定义资源">CRD自定义资源</h2>
+<blockquote>
 <p>KongIngressController自定义了一些资源，以便实现自己的功能。主要有KongPlugin、KongIngress、KongConsumer和KongCredential</p>
 </blockquote>
-<h3 id="KongPlugin"><a href="#KongPlugin" class="headerlink" title="KongPlugin"></a>KongPlugin</h3><blockquote>
+<h3 id="KongPlugin">KongPlugin</h3>
+<blockquote>
 <p>KongPlugin的含义和非Cloud环境下Kong的含义一样，都是Kong的插件</p>
 </blockquote>
 <pre class="language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> configuration.konghq.com/v1
@@ -139,8 +154,8 @@ spec:
 <span class="token key atrule">config</span><span class="token punctuation">:</span> <span class="token comment">#插件本身的配置项</span>
     <span class="token key atrule">key</span><span class="token punctuation">:</span> value
 <span class="token key atrule">plugin</span><span class="token punctuation">:</span> &lt;name<span class="token punctuation">-</span>of<span class="token punctuation">-</span>plugin<span class="token punctuation">></span> <span class="token comment"># 插件名称</span></code></pre>
-
-<h3 id="KongIngress"><a href="#KongIngress" class="headerlink" title="KongIngress"></a>KongIngress</h3><blockquote>
+<h3 id="KongIngress">KongIngress</h3>
+<blockquote>
 <p>KongIngresss在k8s原生的Ingress上面做了扩展，可以更细粒度的控制路由行为。</p>
 </blockquote>
 <pre class="language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> configuration.konghq.com/v1
@@ -167,18 +182,21 @@ spec:
   <span class="token key atrule">protocols</span><span class="token punctuation">:</span>
   <span class="token punctuation">-</span> http
   <span class="token punctuation">-</span> https</code></pre>
-
 <p>KongIngress需要和Ingress结合使用，主要有两种方式：</p>
 <ul>
-<li><p>创建和Ingress规则同样命名空间，同样名称的KongIngress规则。这种情况下，每个Ingress都需要一个KongIngress，不利于维护。</p>
+<li>
+<p>创建和Ingress规则同样命名空间，同样名称的KongIngress规则。这种情况下，每个Ingress都需要一个KongIngress，不利于维护。</p>
 </li>
-<li><p>在Ingress配置中添加注解来进行关联：<code>configuration.konghq.com:&lt;KongIngress-resource-name&gt;</code> 。 这种方式可以复用KongIngress配置。</p>
+<li>
+<p>在Ingress配置中添加注解来进行关联：<code>configuration.konghq.com:&lt;KongIngress-resource-name&gt;</code> 。 这种方式可以复用KongIngress配置。</p>
 </li>
 </ul>
-<h2 id="annotations"><a href="#annotations" class="headerlink" title="annotations"></a>annotations</h2><blockquote>
+<h2 id="annotations">annotations</h2>
+<blockquote>
 <p>KongIngressController在支持k8s原生ingress.class注解的基础上扩展了两个注解：<code>plugins.konghq.com</code>和<code>configuration.konghq.com</code></p>
 </blockquote>
-<h3 id="kubernetes-io-ingress-class"><a href="#kubernetes-io-ingress-class" class="headerlink" title="kubernetes.io/ingress.class"></a><code>kubernetes.io/ingress.class</code></h3><p>如果一个集群中有多个IngressController，一个Ingress只想被指定的IngressController监听，就需要用到此参数</p>
+<h3 id="kubernetes-io-ingress-class"><code>kubernetes.io/ingress.class</code></h3>
+<p>如果一个集群中有多个IngressController，一个Ingress只想被指定的IngressController监听，就需要用到此参数</p>
 <p>Ingress中添加：</p>
 <pre class="language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">metadata</span><span class="token punctuation">:</span>
   <span class="token key atrule">name</span><span class="token punctuation">:</span> foo
@@ -194,31 +212,39 @@ spec:
              <span class="token punctuation">-</span> /kong<span class="token punctuation">-</span>ingress<span class="token punctuation">-</span>controller
              <span class="token punctuation">-</span> <span class="token string">'--election-id=ingress-controller-leader-internal'</span>
              <span class="token punctuation">-</span> <span class="token string">'--ingress-class=kong-internal'</span></code></pre>
-
 <blockquote>
 <p>如果想在同一个k8s集群内部署多个Kong集群，需要同时调整election-id和ingress-class</p>
 </blockquote>
-<h3 id="plugins-konghq-com"><a href="#plugins-konghq-com" class="headerlink" title="plugins.konghq.com"></a><code>plugins.konghq.com</code></h3><p>这个注解主要用来配置插件</p>
+<h3 id="plugins-konghq-com"><code>plugins.konghq.com</code></h3>
+<p>这个注解主要用来配置插件</p>
 <pre class="language-none"><code class="language-none">plugins.konghq.com: high-rate-limit, docs-site-cors</code></pre>
-
-<h3 id="configuration-konghq-com"><a href="#configuration-konghq-com" class="headerlink" title="configuration.konghq.com"></a><code>configuration.konghq.com</code></h3><p>此注解主要用于配置KongIngress</p>
-<h2 id="和Istio结合"><a href="#和Istio结合" class="headerlink" title="和Istio结合"></a>和Istio结合</h2><blockquote>
+<h3 id="configuration-konghq-com"><code>configuration.konghq.com</code></h3>
+<p>此注解主要用于配置KongIngress</p>
+<h2 id="和Istio结合">和Istio结合</h2>
+<blockquote>
 <p>下图主要参考《IstioHandBook》,可以将Kong放到Cluster的前面，对所有的入口流量进行拦截处理。</p>
 </blockquote>
-<p><img src="/images/2019071019/gateway_istio.jpg" alt="gateway-istio" loading="lazy"></p>
-<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ol>
-<li><p>Kong在非云环境下的特性，KongIngressController基本都支持了，比如插件机制、负载均衡策略、Router、Service以及Consumer等概念</p>
+<p><img src="/images/2019071019/gateway_istio.jpg" alt="" loading="lazy"></p>
+<h2 id="优点">优点</h2>
+<ol>
+<li>
+<p>Kong在非云环境下的特性，KongIngressController基本都支持了，比如插件机制、负载均衡策略、Router、Service以及Consumer等概念</p>
 </li>
-<li><p>水平扩展比较方便，很多细节都考虑到了</p>
-</li>
-</ol>
-<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ol>
-<li><p>KongIngressController目前还没有发布正式1.0版本，后续版本可能有不兼容的情况存在（类比Kong1.0前和Kong1.0后经常有Breaking Changes）</p>
-</li>
-<li><p>和服务网格Istio的结合思路还不是很清晰</p>
+<li>
+<p>水平扩展比较方便，很多细节都考虑到了</p>
 </li>
 </ol>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://www.servicemesher.com/istio-handbook/best-practices/how-to-implement-ingress-gateway.html">为服务网格选择入口网关</a></p>
+<h2 id="缺点">缺点</h2>
+<ol>
+<li>
+<p>KongIngressController目前还没有发布正式1.0版本，后续版本可能有不兼容的情况存在（类比Kong1.0前和Kong1.0后经常有Breaking Changes）</p>
+</li>
+<li>
+<p>和服务网格Istio的结合思路还不是很清晰</p>
+</li>
+</ol>
+<h2 id="参考文档">参考文档</h2>
+<p><a target="_blank" rel="noopener" href="https://www.servicemesher.com/istio-handbook/best-practices/how-to-implement-ingress-gateway.html">为服务网格选择入口网关</a></p>
 <p><a target="_blank" rel="noopener" href="https://jimmysong.io/kubernetes-handbook/concepts/ingress.html">Ingress解析</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.servicemesher.com/blog/kubernetes-ingress-controller-deployment-and-ha/">Kubernetes Ingress Controller的使用介绍及高可用落地</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/Kong/kubernetes-ingress-controller/blob/master/docs/design.md">Kong IngressController设计架构</a></p>
