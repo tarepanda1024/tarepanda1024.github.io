@@ -12,10 +12,6 @@ social:
     link: mailto:liuxd2017@163.com
     icon: icon-mail-line
     color: "#8E71C1"
-  - name: 知乎
-    link: https://www.zhihu.com/people/liu-xiao-dong-40-19/activities
-    icon: icon-zhihu-line
-    color: "#0084FF"
 
 menu:
   custom:
