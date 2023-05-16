@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#0078E7"><meta name="author" content="哈利土土"><meta name="copyright" content="哈利土土"><meta name="generator" content="Hexo 6.3.0"><meta name="theme" content="hexo-theme-yun"><title>ApacheDoris异常案例：The statement has been forwarded to master FE(10.x.x.235) and failed to execute | null</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@900&amp;display=swap" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/star-markdown-css@0.4.1/dist/yun/yun-markdown.min.css"><link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/prism-theme-vars/base.css"><script src="https://fastly.jsdelivr.net/npm/scrollreveal/dist/scrollreveal.min.js" defer></script><script>function initScrollReveal() {
+  [".post-card",".markdown-body img"].forEach((target)=> {
+    ScrollReveal().reveal(target);
+  })
+}
+document.addEventListener("DOMContentLoaded", initScrollReveal);
+document.addEventListener("pjax:success", initScrollReveal);
+</script><link rel="icon" type="image/png" href="/images/avatar.png"><link rel="mask-icon" href="/images/avatar.png" color="#0078E7"><link rel="preload" href="/css/hexo-theme-yun.css" as="style"><link rel="prefetch" href="/js/sidebar.js" as="script"><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://fastly.jsdelivr.net/npm/" crossorigin><script id="yun-config">
+    window.Yun = {}
+    window.CONFIG = {"hostname":"photon.fun","root":"/","title":"独钓寒江雪","version":"1.10.9","mode":"auto","copycode":true,"page":{"isPost":true},"i18n":{"placeholder":"搜索...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）"},"anonymous_image":"https://cdn.yunyoujun.cn/img/avatar/none.jpg","say":{"api":"https://el-bot-api.vercel.app/api/words/young"},"local_search":{"path":"/search.xml"},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false,"src":"/js/search/local-search.js"},"fireworks":{"colors":null},"vendors":{"host":"https://fastly.jsdelivr.net/npm/","darken":"https://fastly.jsdelivr.net/npm/darken@1.5.0"}};
+  </script><link rel="stylesheet" href="/css/hexo-theme-yun.css"><script src="/js/hexo-theme-yun.js" type="module"></script><link rel="preconnect" href="https://www.google-analytics.com" crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id=G-G6100ZS3DQ"></script><script>if (CONFIG.hostname === location.hostname) {
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-G6100ZS3DQ');
+}</script><meta name="description" content="apache doris fe节点可以通过部署奇数个Follower构成高可用集群，集群中的master角色，会从这些Follower中选举产生。   如果你并不十分了解 FE 元数据的运行逻辑，或者没有足够 FE 元数据的运维经验，我们强烈建议在实际使用中，只部署一个 FOLLOWER 类型的 FE 作为 MASTER，其余 FE 都是 OBSERVER，这样可以减少很多复杂的运维问题！后面这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ApacheDoris异常案例：The statement has been forwarded to master FE(10.x.x.235) and failed to execute">
+<meta property="og:url" content="https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/index.html">
+<meta property="og:site_name">
+<meta property="og:description" content="apache doris fe节点可以通过部署奇数个Follower构成高可用集群，集群中的master角色，会从这些Follower中选举产生。   如果你并不十分了解 FE 元数据的运行逻辑，或者没有足够 FE 元数据的运维经验，我们强烈建议在实际使用中，只部署一个 FOLLOWER 类型的 FE 作为 MASTER，其余 FE 都是 OBSERVER，这样可以减少很多复杂的运维问题！后面这">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://photon.fun/images/20230515/01/01.png">
+<meta property="og:image" content="https://photon.fun/images/20230515/01/02.png">
+<meta property="og:image" content="https://photon.fun/images/20230515/01/03.png">
+<meta property="og:image" content="https://photon.fun/images/20230515/01/04.png">
+<meta property="article:published_time" content="2023-05-15T11:33:01.000Z">
+<meta property="article:modified_time" content="2023-05-16T02:12:52.569Z">
+<meta property="article:author" content="哈利土土">
+<meta property="article:tag" content="doris">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://photon.fun/images/20230515/01/01.png"><script>(function() {
+  if (CONFIG.mode !== 'auto') return
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+  const setting = localStorage.getItem('darken-mode') || 'auto'
+  if (setting === 'dark' || (prefersDark && setting !== 'light'))
+    document.documentElement.classList.toggle('dark', true)
+})()</script></head><body><script src="https://code.iconify.design/2/2.1.1/iconify.min.js"></script><script>// Define global variable
+IconifyProviders = {
+  // Empty prefix: overwrite default API provider configuration
+  '': {
+    // Use custom API first, use Iconify public API as backup
+    resources: [
+        'https://api.iconify.design',
+    ],
+    // Wait for 1 second before switching API hosts
+    rotate: 1000,
+  },
+};</script><script defer src="https://fastly.jsdelivr.net/npm/animejs@latest"></script><script defer src="/js/ui/fireworks.js" type="module"></script><canvas class="fireworks"></canvas><div class="container"><a class="sidebar-toggle hty-icon-button" id="menu-btn"><div class="hamburger hamburger--spin" type="button"><span class="hamburger-box"><span class="hamburger-inner"></span></span></div></a><div class="sidebar-toggle sidebar-overlay"></div><aside class="sidebar"><script src="/js/sidebar.js" type="module"></script><ul class="sidebar-nav"><li class="sidebar-nav-item sidebar-nav-toc hty-icon-button sidebar-nav-active" data-target="post-toc-wrap" title="文章目录"><span class="icon iconify" data-icon="ri:list-ordered"></span></li><li class="sidebar-nav-item sidebar-nav-overview hty-icon-button" data-target="site-overview-wrap" title="站点概览"><span class="icon iconify" data-icon="ri:passport-line"></span></li></ul><div class="sidebar-panel" id="site-overview-wrap"><div class="site-info fix-top"><a class="site-author-avatar" href="/about/" title="哈利土土"><img width="96" loading="lazy" src="/images/avatar.png" alt="哈利土土"></a><div class="site-author-name"><a href="/about/">哈利土土</a></div><span class="site-name"></span><sub class="site-subtitle"></sub><div class="site-description"></div></div><nav class="site-state"><a class="site-state-item hty-icon-button icon-home" href="/" title="首页"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:home-4-line"></span></span></a><div class="site-state-item"><a href="/archives/" title="归档"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:archive-line"></span></span><span class="site-state-item-count">43</span></a></div><div class="site-state-item"><a href="/categories/" title="分类"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:folder-2-line"></span></span><span class="site-state-item-count">12</span></a></div><div class="site-state-item"><a href="/tags/" title="标签"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="site-state-item-count">21</span></a></div><a class="site-state-item hty-icon-button" target="_blank" rel="noopener" href="https://yun.yunyoujun.cn" title="文档"><span class="site-state-item-icon"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-settings-line"></use></svg></span></a></nav><hr style="margin-bottom:0.5rem"><div class="links-of-author"><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://github.com/tarepanda1024" title="GitHub" target="_blank" style="color:#181717"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-github-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="mailto:liuxd2017@163.com" title="E-Mail" target="_blank" style="color:#8E71C1"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-mail-line"></use></svg></a><a class="links-of-author-item hty-icon-button" rel="noopener" href="https://www.zhihu.com/people/liu-xiao-dong-40-19/activities" title="知乎" target="_blank" style="color:#0084FF"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-zhihu-line"></use></svg></a></div><hr style="margin:0.5rem 1rem"><div class="links"><a class="links-item hty-icon-button" href="/links/index.html" title="我的小伙伴们" style="color:dodgerblue"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-genderless-line"></use></svg></a></div><br><a class="links-item hty-icon-button" id="toggle-mode-btn" href="javascript:;" title="Mode" style="color: #f1cb64"><span class="icon iconify" data-icon="ri:contrast-2-line"></span></a></div><div class="sidebar-panel sidebar-panel-active" id="post-toc-wrap"><div class="post-toc"><div class="post-toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%B7%E5%9B%A0"><span class="toc-number">1.</span> <span class="toc-text">起因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E7%BB%AD"><span class="toc-number">4.</span> <span class="toc-text">后续</span></a></li></ol></div></div></div><div class="tag-cloud"><div class="tag-cloud-tags"><a href="/tags/Consul/" style="font-size: 16.5px; color: #7391ad">Consul</a> <a href="/tags/Consul-template/" style="font-size: 16.5px; color: #7391ad">Consul-template</a> <a href="/tags/Golang/" style="font-size: 16.5px; color: #7391ad">Golang</a> <a href="/tags/Istio/" style="font-size: 12px; color: #999">Istio</a> <a href="/tags/Java/" style="font-size: 30px; color: #0078e7">Java</a> <a href="/tags/Kong/" style="font-size: 25.5px; color: #2680d4">Kong</a> <a href="/tags/Lombok/" style="font-size: 12px; color: #999">Lombok</a> <a href="/tags/Lua/" style="font-size: 21px; color: #4d89c0">Lua</a> <a href="/tags/Maven/" style="font-size: 12px; color: #999">Maven</a> <a href="/tags/Mysql/" style="font-size: 12px; color: #999">Mysql</a> <a href="/tags/Nginx/" style="font-size: 12px; color: #999">Nginx</a> <a href="/tags/Redis/" style="font-size: 16.5px; color: #7391ad">Redis</a> <a href="/tags/doris/" style="font-size: 16.5px; color: #7391ad">doris</a> <a href="/tags/linux/" style="font-size: 12px; color: #999">linux</a> <a href="/tags/%E5%AD%97%E8%8A%82%E7%A0%81/" style="font-size: 12px; color: #999">字节码</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 12px; color: #999">工具</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 12px; color: #999">总结</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 12px; color: #999">数据库</a> <a href="/tags/%E7%BD%91%E5%85%B3/" style="font-size: 25.5px; color: #2680d4">网关</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12px; color: #999">读书笔记</a></div></div></aside><main class="sidebar-translate" id="content"><div id="post"><article class="hty-card post-block" itemscope itemtype="https://schema.org/Article" style="--smc-primary:#0078E7;"><link itemprop="mainEntityOfPage" href="https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/"><span hidden itemprop="author" itemscope itemtype="https://schema.org/Person"><meta itemprop="name" content="哈利土土"><meta itemprop="description"></span><span hidden itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name"></span><header class="post-header"><h1 class="post-title" itemprop="name headline">ApacheDoris异常案例：The statement has been forwarded to master FE(10.x.x.235) and failed to execute</h1><div class="post-meta"><div class="post-time"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:calendar-line"></span></span> <time title="创建时间：2023-05-15 19:33:01" itemprop="dateCreated datePublished" datetime="2023-05-15T19:33:01+08:00">2023-05-15</time></div><div class="post-classify"><span class="post-category"> <span class="post-meta-item-icon" style="margin-right:3px;"><span class="icon iconify" data-icon="ri:folder-line"></span></span><span itemprop="about" itemscope itemtype="https://schema.org/Thing"><a class="category-item" href="/categories/doris/" style="--text-color:var(--hty-text-color)" itemprop="url" rel="index"><span itemprop="text">doris</span></a></span></span><span class="post-tag"><span class="post-meta-divider">-</span><a class="tag-item" href="/tags/doris/" style="--text-color:var(--hty-text-color)"><span class="post-meta-item-icon"><span class="icon iconify" data-icon="ri:price-tag-3-line"></span></span><span class="tag-name">doris</span></a></span></div></div></header><section class="post-body" itemprop="articleBody"><div class="post-content markdown-body"><blockquote>
+<p>apache doris fe节点可以通过部署奇数个Follower构成高可用集群，集群中的master角色，会从这些Follower中选举产生。</p>
+</blockquote>
+<blockquote>
+<p>如果你并不十分了解 FE 元数据的运行逻辑，或者没有足够 FE 元数据的运维经验，我们强烈建议在实际使用中，只部署一个 FOLLOWER 类型的 FE 作为 MASTER，其余 FE 都是 OBSERVER，这样可以减少很多复杂的运维问题！后面这句话，来自官方文档：<a target="_blank" rel="noopener" href="https://doris.apache.org/zh-CN/docs/dev/admin-manual/maint-monitor/metadata-operation#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">ApacheDoris元数据运维-最佳实践</a> 说的很中肯，最近连着遇到了两次元数据的问题😂</p>
+</blockquote>
+<h2 id="起因">起因</h2>
+<p>业务方抛过来一张图：<br>
+<img src="/images/20230515/01/01.png" alt="" loading="lazy"><br>
+表示在通过jdbc执行<code>alter table</code>语句时，发生了如下的异常。让我帮忙排查排查。</p>
+<h2 id="分析">分析</h2>
+<p>因为<code>alter table</code> 语句，涉及到元数据的修改，原则上只能在master节点上修改，难道是master节点出了问题？<code>show proc '/frontends'</code>看看：</p>
+<p><img src="/images/20230515/01/02.png" alt="" loading="lazy"></p>
+<p>图中显示：</p>
+<ul>
+<li>当前的master节点是243不是235</li>
+<li>fe节点状态都是正常的</li>
+</ul>
+<p>看着应该是有节点的信息存在问题，识别错误master节点了。于是从其余的几个fe节点上排查日志，根据<code>The statement has been forwarded to master </code>这个日志，进行查找，没有找到相同的问题。看了一下日志，从Error和Warn也没有看到日有用的信息。那么到底是谁转发的呢？求助与社区，社区建议将235节点drop掉，再加入。这。。。还是自力更生，从代码中看看有没有关键信息吧：</p>
+<pre class="language-java" data-language="java"><code class="language-java"><span class="token comment">//doris查询处理流程：</span>
+<span class="token class-name">ConnectProcessor</span>#dispatch <span class="token operator">-></span> <span class="token class-name">ConnectProcessor</span>#handleQuery <span class="token operator">-></span> <span class="token class-name">StmtExecutor</span>#execute</code></pre>
+<p>快到关键地方了：</p>
+<pre class="language-java" data-language="java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isForwardToMaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>isProxy<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">// This is already a stmt forwarded from other FE.</span>
+        <span class="token comment">// If goes here, which means we can't find a valid Master FE(some error happens).</span>
+        <span class="token comment">// To avoid endless forward, throw exception here.</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">UserException</span><span class="token punctuation">(</span><span class="token string">"The statement has been forwarded to master FE("</span>
+                <span class="token operator">+</span> <span class="token class-name">Catalog</span><span class="token punctuation">.</span><span class="token function">getCurrentCatalog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSelfNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>first <span class="token operator">+</span> <span class="token string">") and failed to execute"</span> <span class="token operator">+</span>
+                <span class="token string">" because Master FE is not ready. You may need to check FE's status"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token function">forwardToMaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>masterOpExecutor <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> masterOpExecutor<span class="token punctuation">.</span><span class="token function">getQueryId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        context<span class="token punctuation">.</span><span class="token function">setQueryId</span><span class="token punctuation">(</span>masterOpExecutor<span class="token punctuation">.</span><span class="token function">getQueryId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+    <span class="token constant">LOG</span><span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"no need to transfer to Master. stmt: &#123;&#125;"</span><span class="token punctuation">,</span> context<span class="token punctuation">.</span><span class="token function">getStmtId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span></code></pre>
+<p>判断这条语句是否需要转发的master执行，那么alter语句是需要转到master的，同时本机不是正确的master。继续往下看，到<code>MasterOpExecutor#forward</code>方法：</p>
+<pre class="language-java" data-language="java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">!=</span> ctx<span class="token punctuation">.</span><span class="token function">queryId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    params<span class="token punctuation">.</span><span class="token function">setQueryId</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span><span class="token function">queryId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token constant">LOG</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Forward statement &#123;&#125; to Master &#123;&#125;"</span><span class="token punctuation">,</span> ctx<span class="token punctuation">.</span><span class="token function">getStmtId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> thriftAddress<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">boolean</span> isReturnToPool <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span></code></pre>
+<p>出现了一条日志，很关键，按图索骥，一台一台机器查找，最终在150这台observer上见到了：<br>
+<img src="/images/20230515/01/03.png" alt="" loading="lazy"><br>
+可以看到这台机器将请求转发到了235，可是243才是master节点啊。说明这个节点记录的master信息有问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>执行重启大法。重启后，再看日志:<br>
+<img src="/images/20230515/01/04.png" alt="" loading="lazy"><br>
+转发正常了。</p>
+<h2 id="后续">后续</h2>
+<p>此次解决了问题，但是具体为什么不一致，还没有排查出来。没想到，没过几天，又发生了类似的问题，预知后续如何，且待下回分解。。。</p>
+</div></section><ul class="post-copyright"><li class="post-copyright-author"><strong>本文作者：</strong>哈利土土</li><li class="post-copyright-link"><strong>本文链接：</strong><a href="https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/" title="ApacheDoris异常案例：The statement has been forwarded to master FE(10.x.x.235) and failed to execute">https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/</a></li><li class="post-copyright-license"><strong>版权声明：</strong>本博客所有文章除特别声明外，均默认采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0 "><span class="icon iconify" data-icon="ri:creative-commons-line"></span><span class="icon iconify" data-icon="ri:creative-commons-by-line"></span><span class="icon iconify" data-icon="ri:creative-commons-nc-line"></span><span class="icon iconify" data-icon="ri:creative-commons-sa-line"></span></a> 许可协议。</li></ul><script>document.addEventListener('copy', function (event) {
+  const clipboardData = event.clipboardData || window.clipboardData;
+  if (!clipboardData) { return; }
+  const text = window.getSelection().toString();
+  if (text) {
+    event.preventDefault();
+    clipboardData.setData('text/plain', text + '\n\n本文作者：哈利土土\n本文链接：https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/\n版权声明：本博客所有文章除特别声明外，均默认采用 CC BY-NC-SA 4.0 许可协议。');
+  }
+});</script></article><div class="post-nav"><div class="post-nav-item"></div><div class="post-nav-item"><a class="post-nav-next" href="/2023/04/06/Linux%E7%A3%81%E7%9B%98%E6%BB%A1%E4%BA%86%E7%9A%84%E5%87%A0%E7%A7%8D%E6%8E%92%E6%9F%A5%E5%A4%84%E7%90%86%E6%96%B9%E6%B3%95/" rel="next" title="linux系统No space left on device的几种排查解决方法"><span class="post-nav-text">linux系统No space left on device的几种排查解决方法</span><span class="icon iconify" data-icon="ri:arrow-right-s-line"></span></a></div></div></div><div class="hty-card" id="comment"><div id="disqus_thread"></div><script>const disqusConfig = function() {
+  this.page.url = "https://photon.fun/2023/05/15/Doris%E5%BC%82%E5%B8%B8-ForwardToMaster/"; // Replace PAGE_URL with your page's canonical URL variable
+  this.page.identifier = "2023/05/15/Doris异常-ForwardToMaster/"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+  this.page.title = "ApacheDoris异常案例：The statement has been forwarded to master FE(10.x.x.235) and failed to execute";
+};
+function loadDisqus() {
+  // here we will only load the disqus <script> if not already loaded
+  if (!window.DISQUS) {
+    (function() {
+      // DON'T EDIT BELOW THIS LINE
+      const d = document,
+        s = d.createElement("script");
+      s.src = "https://xiaodongliu-com.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+  // if disqus <script> is already loaded, we just reset disqus the right way
+  // see https://help.disqus.com/developer/using-disqus-on-ajax-sites
+  else {
+    DISQUS.reset({
+      reload: true,
+      config: function() {
+        this.page.identifier = disqusConfig.page.identifier;
+        this.page.url = disqusConfig.page.url;
+      },
+    });
+  }
+}</script><script src="/js/comments/disqus.js" type="module"></script></div></main><footer class="sidebar-translate" id="footer"><div class="beian"><a rel="noopener" href="https://beian.miit.gov.cn/" target="_blank">浙ICP备20005773号</a></div><div class="copyright"><span>&copy; 2017 – 2023 </span><span class="with-love" id="animate"><span class="icon iconify" data-icon="ri:cloud-line"></span></span><span class="author"> 哈利土土</span></div><div class="powered"><span>由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0</span><span class="footer-separator">|</span><span>主题 - <a rel="noopener" href="https://github.com/YunYouJun/hexo-theme-yun" target="_blank"><span>Yun</span></a> v1.10.9</span></div></footer></div><a class="hty-icon-button" id="back-to-top" aria-label="back-to-top" href="#"><span class="icon iconify" data-icon="ri:arrow-up-s-line"></span><svg class="progress-circle-container" viewBox="0 0 100 100"><circle class="progress-circle" id="progressCircle" cx="50" cy="50" r="48" fill="none" stroke="#0078E7" stroke-width="2" stroke-linecap="round"></circle></svg></a><a class="popup-trigger hty-icon-button icon-search" id="search" href="javascript:;" title="搜索"><span class="site-state-item-icon"><span class="icon iconify" data-icon="ri:search-line"></span></span></a><script>window.addEventListener("DOMContentLoaded", () => {
+  // Handle and trigger popup window
+  document.querySelector(".popup-trigger").addEventListener("click", () => {
+    document.querySelector(".popup").classList.add("show");
+    setTimeout(() => {
+      document.querySelector(".search-input").focus();
+    }, 100);
+  });
+
+  // Monitor main search box
+  const onPopupClose = () => {
+    document.querySelector(".popup").classList.remove("show");
+  };
+
+  document.querySelector(".popup-btn-close").addEventListener("click", () => {
+    onPopupClose();
+  });
+
+  window.addEventListener("keyup", event => {
+    if (event.key === "Escape") {
+      onPopupClose();
+    }
+  });
+});
+</script><script src="https://fastly.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js"></script><script src="/js/search/local-search.js" defer type="module"></script><div class="popup search-popup"><div class="search-header"><span class="popup-btn-close close-icon hty-icon-button"><span class="icon iconify" data-icon="ri:close-line"></span></span></div><div class="search-input-container"><input class="search-input" id="local-search-input" type="text" placeholder="搜索..." value=""></div><div class="search-result-container"></div></div></body></html>
