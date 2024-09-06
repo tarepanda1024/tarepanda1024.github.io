@@ -1,7 +1,7 @@
 ---
-title: ApacheDoris快速运维手册
+title: ApacheDoris运维手册
 date: 2023-02-06 20:11:47
-updated: 2023-02-06 20:11:47
+updated: 2024-09-06 10:30:00
 tags:
   - doris
 categories:
@@ -11,7 +11,38 @@ categories:
 
 > 本手册用于快速排查Doris的问题，并进行紧急修复。
 
-# 基础设置
+采用mysql客户端查询节点状态时，需要先执行 set forward_to_master=true;命令
+
+# 关于重启
+Doris正常跑一段时间后，突然出现严重的不可用问题，主要是数据无法写入、监控发现版本大量堆积。首要的处理办法
+1. 重启fe的master节点
+2. 如果没有解决，再逐个重启全部的fe节点
+3. 如果重启后仍然无法解决，逐个重启所有的be节点
+
+遇到过的三种异常：
+1. 通过show backends;命令查看be节点的lastSuccessReportTabletsTime，如果lastSuccessReportTabletsTime不同节点相差较大，则需要重启fe和be
+2. The statement has been forwarded to master xxx and failed to execute because Master FE is not ready
+3. 事务堆积，无法写入，日志中出现：wait for publishing partition xxx
+
+# 官方文档
+
+- 官方的FQA文档：https://doris.apache.org/zh-CN/docs/faq/install-faq
+- Github Issue文档：https://github.com/apache/doris/issues
+- 社区问答集：https://ask.selectdb.com/
+- 元数据运维文档（非常重要）：https://doris.apache.org/zh-CN/docs/admin-manual/maint-monitor/tablet-repair-and-balance 以及 https://doris.apache.org/zh-CN/docs/admin-manual/maint-monitor/metadata-operation 
+- 分区分桶（非常重要）：https://doris.apache.org/zh-CN/docs/table-design/data-partition
+
+# 微信社群
+
+> selectdb基本是doris社区维护的主要力量，人员也比较友好，疑难问题可以联系他们
+
+微信号：
+- doris pmc：陈明雨 morningman-cmy
+- selectdb：张彬华 yz-jayhua 
+
+# 一些常用配置
+
+## 基础设置
 
 * 调整数据库容量
 
@@ -26,7 +57,7 @@ categories:
   SET PROPERTY FOR 'xxx' 'max_user_connections' = '300';
   ```
 
-# 查询
+## 查询
 
 * 修改超时时间
 
@@ -34,7 +65,7 @@ categories:
   SET query_timeout = 1800;
   ```
 
-# 导入
+## 导入
 
 * 修改单次导入数据上限
 
@@ -42,7 +73,7 @@ categories:
   streaming_load_json_max_mb=10240
   ```
 
-# 分区&副本
+## 分区&副本
 
 * 修改副本数目
 
@@ -73,13 +104,6 @@ categories:
   ALTER TABLE tb_xxx SET ("dynamic_partition.enable" = "true");
   ```
 
-# 杂项
-
-* 批量执行sql
-
-  ```shell
-  cat xxx.sql |xargs -d "\r\n" ./mysql -uxx -P9030 -e -h10.xx.xx.xx -pxxx
-  ```
 
 # 问题处理
 
