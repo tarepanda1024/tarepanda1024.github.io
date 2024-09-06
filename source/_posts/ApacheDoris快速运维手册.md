@@ -9,7 +9,7 @@ categories:
 ---
 
 
-> 本手册用于快速排查Doris的问题，并进行紧急修复。持续更新中。。。
+> 本手册用于快速排查Doris的问题，并进行紧急修复。
 
 # 基础设置
 
@@ -92,6 +92,15 @@ categories:
   ```shell
   ADMIN SET FRONTEND CONFIG ("max_create_table_timeout_second" = "600");
   ```
+* Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: errCode = 2, detailMessage = Incorrect table name 'xxxxx'
 
+回答: 一般是表名过长，默认长度为64，需要调整表名长度。
+
+* jdbc建表超时
+
+回答: 默认查询超时是300s，如果建表语句分区过多，可能会触发超时。可以在session侧，单独配置超时时间，用以规避。配置参考
+
+* 部分query异常，无法在日志里定位到 
+回答: 经过排查，部分用户端显示的错误内容，只有在日志级别为debug是才会打印都日志文件。如果用户端显示错误内容已经很清晰的描述原因，直接以这个原因来判断即可。
 ‍
 
